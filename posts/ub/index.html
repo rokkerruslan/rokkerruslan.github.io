@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru-ru" lang="ru-ru">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.147.9">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Страшилки преобразований &middot; Кот Не Работает</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://rokkerruslan.github.io/"><h1>Кот Не Работает</h1></a>
+      <p class="lead">
+       Сказки для инженеров-программистов младшего уровня 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://rokkerruslan.github.io/">Home</a> </li>
+        <li><a href="mailto:rokkerruslan@protonmail.com"> Email </a></li><li><a href="https://github.com/rokkerruslan"> Github </a></li><li><a href="https://linkedin.com/in/rokkerruslan"> LinkedIn </a></li><li><a href="https://matrix.to/#/@rokkerruslan:matrix.org"> Matrix </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Страшилки преобразований</h1>
+  <time datetime=2025-06-30T00:00:00Z class="post-date">Mon, Jun 30, 2025</time>
+  <p>Это третья сказка, но вторую никак не допишу. Сегодня без ассемблера. Обещаю.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Надпись на обратной стороне. Осторожно. Неопределённое поведение. При сложении двух знаковых чисел, в случае возникновения переполнения, калькулятор может выдать ошибку или взорваться. ПРОВЕРЯЙТЕ переполнение или ИЗБЕГАЙТЕ складывания чисел.
+</span></span></code></pre></div><p>Если вы программируете на языках C/C++ или варитесь возле этой темы, вам
+всегда будут попадаться люди, двух типов:</p>
+<ol>
+<li>Оставляющие за собой код рождающий неопределённое
+поведение и отправляющие его на ревью с припиской - <em>да не ссы, я так сто раз делал</em>.</li>
+<li>Люди рассказывающие про то, что ваша программа уничтожит весь род человеческий если вы
+немедленно это не исправите. А лично вы попадёте в ад, где вам вечность будут зачитывать статьи про плюсы PHP.</li>
+</ol>
+<p>Что же нам, программистам на Go, когда читаем очередную статью про неопределённое
+поведение и сопутствующий ей холивар, она вызывает, обычно, ровно такие же эмоции, как и,
+например, новость про голодающих детей в Уганде<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, то есть никакие.</p>
+<p>Как же нам хорошо, ведь у нас в языке такого произойти не может.</p>
+<p>ИЛИ МОЖЕТ?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Программисты не боятся Бабы Яги, но боятся вещественной арифметики. Ха, не верите, ну так попробуйте подойти к программисту ночью в костюме float64. Если что, я вам этого не говорил.
+</span></span></code></pre></div><p>Да не, брось, какое ещё неопределённое поведение - слышу я от людей
+начиная этот рассказ. И правда в том, что чаще всего словосочетание <em>неопределённое поведение</em>
+ассоциируется у людей как <em>неопределённое поведение</em> (далее UB) из стандартов C/C++.
+И нужно заранее договориться что я не говорю про UB из C/C++. Ведь какое отношение
+могут иметь стандарты C/C++ к языку Go. Никакого.</p>
+<p>Но. <em>Вещь</em>, про которую мы поговорим сегодня, отчасти напоминает UB,
+так как семантика этой <em>вещи</em> определена не полностью<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> и мы можем
+интерпретировать её в данных нам границах. Чтобы писать корректный
+код, нужно точно знать <em>что нам гарантирует</em> спецификация языка.</p>
+<p>Думаю что вы часто преобразовываете числовые типы данных, числа с плавающей
+точкой в целые, знаковые в беззнаковые и так далее. Отсюда и пойдём.</p>
+<p>Представим код который преобразует знаковый тип в беззнаковый.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int64</span> = int64(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">uint64</span> = uint64(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Всё ли здесь хорошо? <a href="https://go.dev/play/p/QIA49WSmgAR">Playground</a>.
+Что вы ожидаете получить в переменной <code>b</code>? Если вы знакомы с дополнительным
+кодом и, самое главное, у вас отличная память, то вы без труда ответите что
+это 18 квинтиллионов 446 квадриллионов 744 триллионов 073 миллиардов 709
+миллионов 551 тысяч 615. Потому как представление -1 в дополнительном коде
+это единицы во всех разрядах включая знаковый разряд, а разрядов всего 64.</p>
+<p>Рассчитываете ли вы на то, что будет именно такой результат? Это был вопрос. Думаю вы ответили —
+да. Но почему да? Вы можете подтвердить это цитатой из спецификации? Какая
+именно строка гарантирует вам что значение <code>-1</code> типа <code>float64</code> будет представлено как максимальное
+беззнаковое число после конвертации в беззнаковый тип? Да, я не хочу
+слышать про представления чисел в памяти, я хочу услышать гарантию.</p>
+<p>Нашли? А что насчёт такого:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">float64</span> = float64(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">uint64</span> = uint64(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Если вы быстро проверяете на Go Playground, то видите что <a href="https://go.dev/play/p/bpWU34pVevi">результат</a>
+точно такой же. Вы с подозрением проверяете его <code>go vet</code>, но предупреждений нет.
+Всё ли тут хорошо? Вы можете рассчитывать на этот результат в этом случае? На этот
+результат рассчитывал программист кастомного кода хеширования
+тесты на который провалились на компьютере архитектуры ARM.</p>
+<p>Хорошо, поищем чего в спецификации связанного с конвертацией числа с плавающей точкой в число целое, вот например есть такое:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>When converting a floating-point number to an integer, the fraction is discarded (truncation towards zero).
+</span></span></code></pre></div><p>Так, отбросили дробную часть, а дальше по аналогии с <code>uint64</code>, поэтому результат аналогичен?</p>
+<p>А что если я скажу что результатом может быть 0? Да, <em>ноль</em>, ни одного установленного бита в результирующем <code>uint64</code>. И это правильный ответ. Если у вас
+компьютер на базе семейств архитектур ARM вы можете запустить пример локально и увидеть число 0.
+Если такого под рукой нет, можете попробовать <a href="https://www.boot.dev/playground/go">WebAssembly</a>,
+там вы вообще получите 9223372036854775808, само число для меня загадка, но если вы знаете как оно получилось, обязательно напишите мне.</p>
+<p>Ответ на основной вопрос — нет. Мы не можем рассчитывать на <em>один, конкретный</em>
+результат. Потому что результат — <em>implementation-dependent</em>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>- Операция прошла успешно. Результат зависит от того как посмотреть.
+</span></span><span style="display:flex;"><span>- ЧТО?
+</span></span></code></pre></div><p>Посмотрим внимательно на абзац (он расположен в конце блока озаглавленного <code>Conversions between numeric types</code>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>In all non-constant conversions involving floating-point or complex values, if the result type cannot represent the value the conversion succeeds but the result value is implementation-dependent.
+</span></span></code></pre></div><p>Для всех не константных преобразований (типов) затрагивающих числа с плавающей точкой, если
+результирующий тип не может представить значение, конверсия будет успешной, но результирующее
+значение зависит от реализации.</p>
+<p>Подпадет ли это под наш кейс, очевидно — да. Наш пример затрагивает числа с плавающей точкой. И да наш
+результирующий тип <code>uint64</code> не может представить число <code>-1</code>, потому что <code>uint64</code> не может представить никакое отрицательное
+число, являясь беззнаковым типом данных.</p>
+<p>Проблема в том, что спецификация Go не определяет что такое <em>implementation-dependent</em> поведение.
+Должно ли где-то документироваться поведение для реализаций? Должно ли это поведение
+сохраняться для всех для одной реализации на протяжении времени? Я могу рассчитывать что на ARM всегда будет 0?</p>
+<p>Например, в стандарте С++ есть очень похожий термин - <code>implementation-defined behavior</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>behavior, for a well-formed program ([defns.well.formed]) construct and correct data, that depends on the implementation and that each implementation documents
+</span></span></code></pre></div><p>Говорит нам о том, что результат зависит от реализации и каждая реализация документирует поведение. Насчёт гошного <em>implementation-dependent</em> я в спецификации
+не нашёл, единственное, что можно сказать, программа после такой конверсии не запаникует — <code>the value the conversion succeeds</code>, а результат — загадка.
+Я бы посоветовал избегать <em>implementation-dependent</em> конструкций.</p>
+<p>Как видите наша участь немного лучше, чем у программистов на C++, но всё же как просто совершить ошибку пропустив
+не самый заметный блок в спецификации. На этом всё, надеюсь вам стало интересно, какие ещё конструкции языка
+Go могут рождать <em>implementation-dependent</em> поведение. Расскажите?</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Глубочайшие извинения всем угандцам если в их стране дети не голодают, мне просто нужна
+была случайная африканская страна с названием намекающим на то, что там может кто-то голодать.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>Если она в последствии будет определена я обязательно поправлю статью. Сейчас на дворе лето 2025 и Go 1.24.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
