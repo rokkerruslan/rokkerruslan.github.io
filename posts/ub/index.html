@@ -53,8 +53,9 @@
   <h1>Страшилки преобразований</h1>
   <time datetime=2025-06-30T00:00:00Z class="post-date">Mon, Jun 30, 2025</time>
   <p>Это третья сказка, но вторую никак не допишу. Сегодня без ассемблера. Обещаю.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Надпись на обратной стороне. Осторожно. Неопределённое поведение. При сложении двух знаковых чисел, в случае возникновения переполнения, калькулятор может выдать ошибку или взорваться. ПРОВЕРЯЙТЕ переполнение или ИЗБЕГАЙТЕ складывания чисел.
-</span></span></code></pre></div><p>Если вы программируете на языках C/C++ или варитесь возле этой темы, вам
+<blockquote>
+<p>Надпись на обратной стороне. Осторожно. Неопределённое поведение. При сложении двух знаковых чисел, в случае возникновения переполнения, калькулятор может выдать ошибку или взорваться. ПРОВЕРЯЙТЕ переполнение или ИЗБЕГАЙТЕ складывания чисел.</p></blockquote>
+<p>Если вы программируете на языках C/C++ или варитесь возле этой темы, вам
 всегда будут попадаться люди, двух типов:</p>
 <ol>
 <li>Оставляющие за собой код рождающий неопределённое
@@ -67,8 +68,9 @@
 например, новость про голодающих детей в Уганде<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, то есть никакие.</p>
 <p>Как же нам хорошо, ведь у нас в языке такого произойти не может.</p>
 <p>ИЛИ МОЖЕТ?</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Программисты не боятся Бабы Яги, но боятся вещественной арифметики. Ха, не верите, ну так попробуйте подойти к программисту ночью в костюме float64. Если что, я вам этого не говорил.
-</span></span></code></pre></div><p>Да не, брось, какое ещё неопределённое поведение - слышу я от людей
+<blockquote>
+<p>Программисты не боятся Бабы Яги, но боятся вещественной арифметики. Ха, не верите, ну так попробуйте подойти к программисту ночью в костюме float64. Если что, я вам этого не говорил.</p></blockquote>
+<p>Да не, брось, какое ещё неопределённое поведение - слышу я от людей
 начиная этот рассказ. И правда в том, что чаще всего словосочетание <em>неопределённое поведение</em>
 ассоциируется у людей как <em>неопределённое поведение</em> (далее UB) из стандартов C/C++.
 И нужно заранее договориться что я не говорю про UB из C/C++. Ведь какое отношение
@@ -116,19 +118,24 @@
 результат рассчитывал программист кастомного кода хеширования
 тесты на который провалились на компьютере архитектуры ARM.</p>
 <p>Хорошо, поищем чего в спецификации связанного с конвертацией числа с плавающей точкой в число целое, вот например есть такое:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>When converting a floating-point number to an integer, the fraction is discarded (truncation towards zero).
-</span></span></code></pre></div><p>Так, отбросили дробную часть, а дальше по аналогии с <code>uint64</code>, поэтому результат аналогичен?</p>
+<blockquote>
+<p>When converting a floating-point number to an integer, the fraction is discarded (truncation towards zero).</p></blockquote>
+<p>Так, отбросили дробную часть, а дальше по аналогии с <code>uint64</code>, поэтому результат аналогичен?</p>
 <p>А что если я скажу что результатом может быть 0? Да, <em>ноль</em>, ни одного установленного бита в результирующем <code>uint64</code>. И это правильный ответ. Если у вас
 компьютер на базе семейств архитектур ARM вы можете запустить пример локально и увидеть число 0.
 Если такого под рукой нет, можете попробовать <a href="https://www.boot.dev/playground/go">WebAssembly</a>,
 там вы вообще получите 9223372036854775808, само число для меня загадка, но если вы знаете как оно получилось, обязательно напишите мне.</p>
 <p>Ответ на основной вопрос — нет. Мы не можем рассчитывать на <em>один, конкретный</em>
 результат. Потому что результат — <em>implementation-dependent</em>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>- Операция прошла успешно. Результат зависит от того как посмотреть.
-</span></span><span style="display:flex;"><span>- ЧТО?
-</span></span></code></pre></div><p>Посмотрим внимательно на абзац (он расположен в конце блока озаглавленного <code>Conversions between numeric types</code>):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>In all non-constant conversions involving floating-point or complex values, if the result type cannot represent the value the conversion succeeds but the result value is implementation-dependent.
-</span></span></code></pre></div><p>Для всех не константных преобразований (типов) затрагивающих числа с плавающей точкой, если
+<blockquote>
+<ul>
+<li>Операция прошла успешно. Результат зависит от того как посмотреть.</li>
+<li>ЧТО?</li>
+</ul></blockquote>
+<p>Посмотрим внимательно на абзац (он расположен в конце блока озаглавленного <code>Conversions between numeric types</code>):</p>
+<blockquote>
+<p>In all non-constant conversions involving floating-point or complex values, if the result type cannot represent the value the conversion succeeds but the result value is implementation-dependent.</p></blockquote>
+<p>Для всех не константных преобразований (типов) затрагивающих числа с плавающей точкой, если
 результирующий тип не может представить значение, конверсия будет успешной, но результирующее
 значение зависит от реализации.</p>
 <p>Подпадет ли это под наш кейс, очевидно — да. Наш пример затрагивает числа с плавающей точкой. И да наш
@@ -138,8 +145,9 @@
 Должно ли где-то документироваться поведение для реализаций? Должно ли это поведение
 сохраняться для всех для одной реализации на протяжении времени? Я могу рассчитывать что на ARM всегда будет 0?</p>
 <p>Например, в стандарте С++ есть очень похожий термин - <code>implementation-defined behavior</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>behavior, for a well-formed program ([defns.well.formed]) construct and correct data, that depends on the implementation and that each implementation documents
-</span></span></code></pre></div><p>Говорит нам о том, что результат зависит от реализации и каждая реализация документирует поведение. Насчёт гошного <em>implementation-dependent</em> я в спецификации
+<blockquote>
+<p>behavior, for a well-formed program ([defns.well.formed]) construct and correct data, that depends on the implementation and that each implementation documents</p></blockquote>
+<p>Говорит нам о том, что результат зависит от реализации и каждая реализация документирует поведение. Насчёт гошного <em>implementation-dependent</em> я в спецификации
 не нашёл, единственное, что можно сказать, программа после такой конверсии не запаникует — <code>the value the conversion succeeds</code>, а результат — загадка.
 Я бы посоветовал избегать <em>implementation-dependent</em> конструкций.</p>
 <p>Как видите наша участь немного лучше, чем у программистов на C++, но всё же как просто совершить ошибку пропустив
