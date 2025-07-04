@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru-ru" lang="ru-ru">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.147.9">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Страшилки преобразований. Часть 2 &middot; Кот Не Работает</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://rokkerruslan.github.io/"><h1>Кот Не Работает</h1></a>
+      <p class="lead">
+       Сказки для инженеров-программистов младшего уровня 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://rokkerruslan.github.io/">Home</a> </li>
+        <li><a href="mailto:rokkerruslan@protonmail.com"> Email </a></li><li><a href="https://github.com/rokkerruslan"> Github </a></li><li><a href="https://linkedin.com/in/rokkerruslan"> LinkedIn </a></li><li><a href="https://matrix.to/#/@rokkerruslan:matrix.org"> Matrix </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Страшилки преобразований. Часть 2</h1>
+  <time datetime=2025-07-04T00:00:00Z class="post-date">Fri, Jul 4, 2025</time>
+  <p>Мне понравилась идея небольших статей, продолжаем. Наверное, лучшее название было бы — <em>страшилки представления</em>,
+но раз эта вторая часть в серии так что оставлю прежнее.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// Любой уважающий себя современный микропроцессор:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 0.1 == 0.1
+</span></span><span style="display:flex;"><span>True
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 0.1 + 0.1 == 0.2 
+</span></span><span style="display:flex;"><span>True
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 0.1 + 0.2 == 0.3
+</span></span><span style="display:flex;"><span>False
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// ЧТО?
+</span></span></code></pre></div><p>Как я уже упоминал, программисты боятся арифметики с плавающей точкой. И не зря.</p>
+<p>Итак:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:noinline</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">foo</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span><span style="color:#f92672">*</span><span style="color:#a6e22e">b</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">c</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:noinline</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bar</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">barmul</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">c</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:noinline</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">barmul</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">float64</span>) <span style="color:#66d9ef">float64</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">b</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0.6666666666666</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0.3333333333</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0.2222222</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	println(<span style="color:#a6e22e">foo</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span>) <span style="color:#f92672">==</span> <span style="color:#a6e22e">bar</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Предлагаю ответить на вопрос, возможна ли ситуация когда программа распечатает <code>false</code>? Если
+да, то когда. Предлагаю остановиться тут и подумать.</p>
+<p>А если заменить строку в функции <code>foo</code> на такую: <code>return float64(a*b) + c</code>? Сейчас?</p>
+<blockquote>
+<p>— <em>А ты чо поменял то?</em></p></blockquote>
+<p>Значение переменных a, b, c специально подобраны, но таких значений дающих false
+много, просто первые который дали разный результат (дело не в них). Можете
+попробовать найти и другие.</p>
+<p>Однажды я наткнулся на интересный <a href="https://github.com/golang/go/issues/61061">issue</a>
+в репозитории Go. Если не разбираться, то выглядит как магия, человек нашёл пример
+кода который при запуске на разных платформах выдаёт разные результаты. Как видите
+я отвечал в треде, но сейчас вижу что ответ, на самом деле, плохой. Сильно много
+деталей, а подвода к ним нет.</p>
+<p>Я привёл ссылку на issue чтобы вы могли посмотреть оригинал &ldquo;волшебного&rdquo; кода, но хочу
+заметить что там совсем никудышный пример, он переусложнён, или недоупрощён если это часть какой-то программы которая у него сломалась. Можно
+сильно упростить, нам необходима только конструкция вида <code>a * b + c</code>, то есть пример с функциями foo/bar
+это точно такой же, но без лишних деталей.</p>
+<p>Вернёмся к выражению <code>a * b + c</code>. Если вы попробовали запустить на <a href="https://go.dev/play/p/ON6V27axtzr">Go Playground</a>, то увидите что результат true.
+Но если вы, как и автор issue, запустите этот пример на Apple M1 ARM64, то результат будет false.</p>
+<p>В чём же дело? Это на самом деле очень хороший пример где для того чтобы, сделать следующий шаг может
+пригодиться базовое знание ассемблера. Ведь если результаты разные, значит мы как программист можем
+спуститься на один уровень абстракции вниз, посмотрев, может быть там есть различия?</p>
+<p>Так выглядит функция <code>foo</code>, в регистрах F0, F1, F2, лежат значения переменных a, b, c. Результат помещается обратно в F0,
+где его будет ждать вызывающий код:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT	main.foo(SB)
+</span></span><span style="display:flex;"><span>FMADDD	F0, F2, F1, F0
+</span></span><span style="display:flex;"><span>RET
+</span></span></code></pre></div><p>И ассемблерный код для функции <code>bar</code>, в котором происходит сначала вызов функции <code>barmul</code> перемножающий два числа в регистрах F1 и F0, а
+далее инструкция добавления значения F2 к F0:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT	main.bar
+</span></span><span style="display:flex;"><span>CALL	main.barmul
+</span></span><span style="display:flex;"><span>ADDSD	F2, F0
+</span></span><span style="display:flex;"><span>RET
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TEXT	main.barmul
+</span></span><span style="display:flex;"><span>MULSD	F1, F0
+</span></span><span style="display:flex;"><span>RET
+</span></span></code></pre></div><p>Ну и какая разница? А разница в том, что математика представления чисел в компьютере не даёт возможности <em>точно</em> представить
+все возможные числа. И перед тем как блоку работы с floating-point (FP) сохранить значение, его нужно округлить.</p>
+<p>Разберём ещё раз пример, но уже с этой информацией.</p>
+<p>Функция <code>foo</code> берёт значения a, b, c, выполняет инстркцию FMADD, получает результат, окруляет его до ближайнего значения
+которое может быть сохранено согласно стандарту IEEE 754 и помещает результат в F0.</p>
+<p>Функция <code>bar</code> берёт значения a, b, передаёт их функции barmul, barmul умножает a на b, получает рузльутт, округляет его
+до ближайшего значения которое может быть представлено согласно стандарту IEEE 754 и помещает результат в F0.
+Далее функция <code>bar</code>, прибаляет значение F2 к F0, поулчает результат, округляет его до ближайнего значения и сохраняет
+результат в F0.</p>
+<p>Рзное кол-во округлений и приводит к разному результату. Дело раскрыто.</p>
+<p>Что за FMADDD? Эти инструкции называются <code>FMA instruction set</code> которые нужны для выполнения совмещённой операции <em>умножения-сложения</em>.
+Главная цель которой уменьшить</p>
+<p>Язык Go, со слов разработчиков, выбрал именно неявное использование FMA инструкция потому что это генерирует максимально быстрый код. Часть
+спецификации по этому моменту:</p>
+<blockquote>
+<p>An implementation may combine multiple floating-point operations into a single fused
+operation, possibly across statements, and produce a result that differs from the value
+obtained by executing and rounding the instructions individually. An explicit
+floating-point type conversion rounds to the precision of the target type, preventing
+fusion that would discard that rounding.</p></blockquote>
+<blockquote>
+<p>For instance, some architectures provide a &ldquo;fused multiply and add&rdquo; (FMA) instruction
+that computes x<em>y + z without rounding the intermediate result x</em>y. These examples
+show when a Go implementation can use that instruction:</p></blockquote>
+<pre tabindex="0"><code>// FMA allowed for computing r, because x*y is not explicitly rounded:
+r  = x*y + z
+r  = z;   r += x*y
+t  = x*y; r = t + z
+*p = x*y; r = *p + z
+r  = x*y + float64(z)
+
+// FMA disallowed for computing r, because it would omit rounding of x*y:
+r  = float64(x*y) + z
+r  = z; r += float64(x*y)
+t  = float64(x*y); r = t + z
+</code></pre><p>Заметьте, что конструкия <code>float64(...)</code>, имеет дополнительную семантику, это не только <em>конверсия типа</em> но и
+запрет на использование FMA. Вот таки дела.</p>
+<h3 id="альтернативное-введение">Альтернативное введение</h3>
+<p><em>Классический разговор с Chat GPT</em>.</p>
+<blockquote>
+<p>У тебя есть конструкция <code>x := a * b + c</code> на языке Go, все переменные типа float64. Если может
+ли получиться разный результат в переменной x на разных платформах, если да, то как его избежать?</p>
+<p>&hellip;
+Используйте функции для фиксированного порядка
+Например, явно разбивайте выражения на отдельные шаги:</p>
+<p>mul := a * b</p>
+<p>x := mul + c</p>
+<p>Это помогает убедиться, что порядок выполнения не изменится &hellip;</p></blockquote>
+<p>Либо эта штука ещё очень далека от того, чтобы давать хоть немного осмысленные ответы, либо
+она сознательно прикидывается идиотом, чтобы выйграть время пока ищёт способы порабощения
+человечества.</p>
+
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
