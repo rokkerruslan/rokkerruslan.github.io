@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru-ru" lang="ru-ru">
+<head>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.147.9">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Чем вы тут вообще занимаетесь или как поделить число на два &middot; Кот Не Работает</title>
+  <meta name="description" content="" />
+
+  
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://rokkerruslan.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://rokkerruslan.github.io/"><h1>Кот Не Работает</h1></a>
+      <p class="lead">
+       Сказки для инженеров-программистов младшего уровня 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://rokkerruslan.github.io/">Home</a> </li>
+        <li><a href="mailto:rokkerruslan@protonmail.com"> Email </a></li><li><a href="https://github.com/rokkerruslan"> Github </a></li><li><a href="https://linkedin.com/in/rokkerruslan"> LinkedIn </a></li><li><a href="https://matrix.to/#/@rokkerruslan:matrix.org"> Matrix </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2025. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>Чем вы тут вообще занимаетесь или как поделить число на два</h1>
+  <time datetime=2025-07-07T00:00:00Z class="post-date">Mon, Jul 7, 2025</time>
+  <p>Подходили к вам когда-нибудь ваши знакомые или друзья с вопросом — &ldquo;а чем вы, программисты, вообще занимаетесь,
+кроме того что просто тычете по клавишам?&rdquo;. Наверное
+людей и правдо интересует зачем платят деньги за набор (к тому же медленный) текста на клавиатуре, даже
+если эти люди целый день таскают с собой мобильный телефон<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
+<p>Но вопрос есть вопрос, и если попытаться ответить без шутки, что же мы на <em>самом деле</em> делаем (кроме того что спим и едим).
+Да, можно попробовать. Ну, думаю что тем же чем занимаются и другие инженеры, пытаемся заставить ресурсы
+(в нашем случае это вычислительные машины) работать на человека и приносить какую-то пользу (считается ли пользой для человечества перекладывание JSON из одного места в другой?).</p>
+<p>Ну а что именно, что конкретно не умееют делать эти ваши вычислительные машины и как их учить? Вот, такой вопрос уже
+намного более интересный.</p>
+<blockquote>
+<p>— Расскажи как работает нейросеть? Или не, лучше как работает блокчейн?</p>
+<p>— Ну, я могу рассказать как работает блокчейн, но во первых, это потребует объяснений математической логики, дискретной математики и много каких ещё наук.
+Об этой вещи неполучится рассказать просто, потому что это вещь сложная.
+И тут я не соглашусь с высказываниями людей о том что если ты не можешь объяснить
+ребёнку ты это не понимаешь. Может быть любопытству ребёнка будет достаточно знаний о том, что ракета
+летает потому что у неё есть двигаетель, но это нисколько не приблизит ребёнка
+к постройке реальной ракеты.
+Во вторых, программирование это абстракции, не так просто объяснить с приведением корректной аналогии
+что такое, например, хеширование.
+В третих, я не работаю, ни над нейросетями ни над блокчейнами. Не работаю, в смысле не работаю проффесионально,
+например у меня нет своей криптовалюты, что к счастью. Поэтому тонкостей я не знаю. Я работаю
+над сетевыми сервисами, можешь спросить что-нибудь об этом.</p></blockquote>
+<p>Имея круг общения не связанный с IT получаешь такой вопрос постоянно. Насколько сложно будет рассказать
+о конкретном примере, вот есть задача, человеку необходимо её решить, но компьютер делать этого
+пока не умеет и вот так-то так-то можно его научить.</p>
+<p>Насколько простой пример необходимо подобрать чтобы в достаточной мере (в том смысле что у вас
+получится это воспроизвести<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>) объяснить в рамках одной небольшой полуразвлекательной статьи.
+Тем более я всегда хотел написать что-то не только для программистов, но и для людей интересующихся
+тем что такое программирование и которые, может быть, когда-нибудь пойдут по этим стопам.</p>
+<p>И этот вопрос - &ldquo;как поделить число на 2?&rdquo;. Это отличный вопрос, вы убедитесь в том, чтобы научить
+ЭВМ делить на два нужно совем немного знаний. Знать как представлены числа и самую простую математику
+с этими числами. А задача совершенно реальная, так как людям нужно делить числа и, например, некоторые микропроцессоры не умееет
+делить числа встроенными командами и его нужно учить. Кроме этого, можно показать процесс
+исследования проблемы и формальный подход к решению.</p>
+<p>Ещё вопрос интересен тем, что большинство программистов у которых я так же интересовался
+этим самым, ответили на этот вопрос не правильно (ниже вопрос будет приведён полностью, если
+вы хотите попробовать ответить до моего разбора). Сначала я хотел назвать статью - &ldquo;НА ЭТОТ ВОПРОС 100 ПРОГРАММИСТОВ ИЗ 100 ОТВЕТИЛИ НЕ ПРАВИЛЬНО.&rdquo;, но потом счёл, что это какой-то слишком клилбейтный заголовок.</p>
+<h2 id="что-нужно-знать">Что нужно знать</h2>
+<p>Статью можно читать если вы не занимаетесь программированием профессионально. Я постараюсь сделать так,
+чтобы читателю можно было пропустить тот или иной участок статьи который связан с программированием напрямую
+(например какой-то кусок программного кода) и не упустить основную идею. Если вы не программируете, раздел <code>Сдвинуть на 1 бит вправо</code> может
+быть вам непонятен, он является настоящим введением и скорее несёт художествунную цель (хотя и содержит программный
+код). Начиная с раздела <code>Как устроены числа в компьютере</code> нужно читать внимательно. Раздел
+<code>Extra</code> тоже можно пропустить, там показаны некоторые особенности для языка Go.</p>
+<p>Математика не превышает 6 класса, и то, только за счёт упоминания отрицательных чисел, да я
+погуглит когда проходят отрицательные числа, в остальном мы не будем затрагивать понятия выше 2 класса.
+Умение складывать числа стобликом сделает чтение статьи простым.</p>
+<p>Когда я говорю о делении, я всегда подразумеваю <em>целочисленное деление</em>, операция
+в результате которой получается целая часть частного без остатка. То есть
+корректным результатом деления 6 на 2 и 7 на 2 будет число 3, а корректным результатом деления -6 на 2 и -7 на 2 будет -3.</p>
+<p>Нужно ориентироваться в позиционных системах счисления (далее СС), хотя бы в двоичной системе,
+на крайняк хотя бы в десятичной, или иметь под рукой калькулятор чтобы переводить двоичное
+представление числа в десятичное и наоборот. Втроенный калькулятор Windows отличное решение.
+Если же ничего нет, воспользуйтесь <a href="https://calculatori.ru/perevod-chisel.html?id=1196">этим</a> сайтом.</p>
+<p>В записях часто будет встречаться ведущие нули у чисел, например число 12 в десятичной СС может быть
+записано с помощью 4 знаков - <code>0012</code>. А число 7 в
+двоичной СС может быть записано с помощью 8 знаков так - <code>00000111</code>.
+Ведущие нули не влияют на значение числа, их можно отбросить, но для наглядности  иногда они будут
+присутствовать (например при сложении
+столбиком, когда удобно что соответствующие друг другу разряды обоих чисел стоят на одной вертикали, даже если сами числа отличаются на порядки).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>   // Можно так
+</span></span><span style="display:flex;"><span>   + 1
+</span></span><span style="display:flex;"><span>     123
+</span></span><span style="display:flex;"><span>     124
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   // Но такая запись удобнее
+</span></span><span style="display:flex;"><span>   + 0001
+</span></span><span style="display:flex;"><span>     0123
+</span></span><span style="display:flex;"><span>     0124
+</span></span></code></pre></div><p>Слово бит в статье имеет значения слова разряд (когда вы видите слово бит можете читать разряд, но не наоборот!).
+Значение слова <em>регистр</em> не совпадает со значением этого слова в схемотехнике. В статье это просто набор бит.</p>
+<p>Статья всё ещё на этапе сбора фитбека. Я всё ещё ей не доволен. Может быть в ней что-то будет изменено. Если
+у вас есть предложения, <a href="https://github.com/rokkerruslan/gobuch/pulls">забегайте</a>.</p>
+<h2 id="сдвинуть-на-1-бит-вправо">Сдвинуть на 1 бит вправо</h2>
+<p>Но вернёмся к задаче. Разные люди с разной подготовкой могут задать разные уточняющие вопросы.
+Меня не проведёшь - заговорит программист уже не раз попадавший на уловки не уточнения задачи. <em>Какое
+именно число нужно поделить?</em> Ладно, я это и хотел сказать. Мы будем делить целые, знаковые
+числа представленные в дополнительном коде. Это ровно такое предсталвние что используется современными
+вычислительными машинами, например вашим копмьютером или телефоном с которого вы читаете эту статью.
+Разрядность (то есть число порядков) числа возьмём небольшую, например 8 разлядов, для сути разницы нет, но манипулировать числами вида - <code>10010011</code>
+намного приятнее глазу чем - <code>10101010101010101010101011001100010100000011110000101110000111</code>.</p>
+<p>И самый классический ответ который я получаю, это:</p>
+<pre tabindex="0"><code>- Сдвинуть на 1 бит вправо.
+</code></pre><p>Сдвинуть? Что это вообще значит? Убрать один разряд. Самый правый. На самом деле, тут не нужно иметь
+инженерное образование чтобы понять что удаление самого правого разряда приводит к делению числа на показатель основания СС,
+достаточно немного проницательности. Вы можете попробовать провести эту операцию на любом
+десятичном числе по вашему выбору. Но если не поняли сходу то пока просто идём дальше.</p>
+<p>Поидее это должно работать, поэтому мы можем просто попробовать.</p>
+<blockquote>
+<p>Существует ровно один способ сдвига вправо и
+выражащий его оператор воскликнет программист на Go. Существует
+не одна функция сдвига, можно сдвигать через флаг переноса,
+есть логический и арифметический сдвиг и циклический сдвиг
+скажет ему в ответ программист на языке ассемблерлера.</p></blockquote>
+<p>Ну, раз мы хотим научить компьютер нам нужен какой-то способ выражения наших мыслей понятный в том числе и
+копьютеру, язык Go для этого подходит, давайте поищем в документации что-то на счёт сдвигов.</p>
+<blockquote>
+<p>The shift operators shift the left operand by the shift count specified by the right operand, which must
+be non-negative. If the shift count is negative at run time, a run-time panic occurs. The shift operators
+implement arithmetic shifts if the left operand is a signed integer and logical shifts if it is an unsigned
+integer. There is no upper limit on the shift count. Shifts behave as if the left operand is shifted n
+times by 1 for a shift count of n. As a result, x &laquo; 1 is the same as x*2 and x &raquo; 1 is the same as x/2
+but truncated towards negative infinity.</p></blockquote>
+<p>Как видим да, оператор сдвига есть. Он сдвигает левый операнд на величину указанную правым операндом.
+Ещё нам указывают что величина сдвига не может быть отрицательной. И то, что есть разница в механизме
+сдвига в зависимости от того знаковый левый операнд или нет. Пока опустим эти подробности.</p>
+<p>Раз существует только один оператор, выбора у нас нет. И выглядеть это будет вот так:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fakediv</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// fakediv(6) ; 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// fakediv(7) ; 3</span>
+</span></span></code></pre></div><p><a href="https://go.dev/play/p/GR584FFd8g6">Работает?</a> На сколько вы уверены по шкале от одного до сорока двух? Да, так
+как деление целочисленное, правильный ответ 3 в обоих случаях, НО ЧТО_ТО РАБОТАЕТ НЕ ТАК. Как программисты вообще понимают что что-то работает не корректно?
+Ну, можно отдать этот код в релиз. Поидее пользователи придут минут через 5. А ещё? Тестирование, Тестированием мы
+можем попытаться выявить самые явные ошибки и снизить их стоимость. Давайте напишем тест. Например при работе с числами
+можно проверять числа отрицательные, положительные, четные и нечетные. Интересно что входные данные к
+выбранной нами задачи вообще можнество конечное. Но чтобы определить его нужно знать представление, поэтому пока,
+давайте попробуем поделить числа, допустим, от <code>-5</code> до <code>5</code>.</p>
+<p>Итак - тест:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;testing&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">truediv</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fakediv</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TestDiv</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">int8</span> = <span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">y</span> <span style="color:#66d9ef">int8</span> = <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">got</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fakediv</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">want</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">truediv</span>(<span style="color:#a6e22e">i</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">got</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">want</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">t</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;incorreсt result of division %d, want %d, got %d&#34;</span>, <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">want</span>, <span style="color:#a6e22e">got</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">y</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Тест выдаст ошибку, если наша функция деления получит результат отличный от результата настоящей функции деления. Тест не проходит:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>--- FAIL: TestDiv (0.00s)
+</span></span><span style="display:flex;"><span>    main_test.go:26: incorreсt result of division -9, want -4, got -5
+</span></span><span style="display:flex;"><span>    main_test.go:26: incorreсt result of division -7, want -3, got -4
+</span></span><span style="display:flex;"><span>    main_test.go:26: incorreсt result of division -5, want -2, got -3
+</span></span><span style="display:flex;"><span>    main_test.go:26: incorreсt result of division -3, want -1, got -2
+</span></span><span style="display:flex;"><span>    main_test.go:26: incorreсt result of division -1, want 0, got -1
+</span></span><span style="display:flex;"><span>FAIL
+</span></span><span style="display:flex;"><span>exit status 1
+</span></span><span style="display:flex;"><span>FAIL    einbuch 0.244s
+</span></span></code></pre></div><p>Ошибка деления происходит
+при всех нечётных отрицательных числах. Используя мою
+любимую ложную дихотомию можно сказать что либо оператор <code>&gt;&gt;</code> не сдвиг, либо
+сдвигом нельзя делить. Но если вы сами попробуете провести эксперимент и поспрашивать
+программистов, вы с очень высокой вероятностью получите именно такой ответ - &ldquo;сдвинуть на один разряд вправо&rdquo;.
+Иногда это будет звучать как заклинание, и как мы все знаем, чтобы оно нормально сработало необходимо ко всему прочему
+взмахнуть волшебной палочкой нарисовав в воздухе схему сдвигового регистра.</p>
+<p>Проблему можно решить вообще не вникая в представления чисел. Что бы вы например
+сделали незнай вы про дополнительный код и про механизм работы сдвигов?</p>
+<p>Так давайте подумаем, если результат отличается на 1 в меньшую сторону и только для отрицательных нечётных
+чисел, то можно добавить 1 к результату если делимое число отрицательное и нечётное. Л-ЛОГИКА. &ldquo;Улучшаем&rdquo;:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isBadNumber</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> &lt; <span style="color:#ae81ff">0</span>) <span style="color:#f92672">&amp;&amp;</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fakedivImproved</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isBadNumber</span>(<span style="color:#a6e22e">a</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>B запуск тестов говорит нам что сейчас всё отлично:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">PASS</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ok</span>      <span style="color:#a6e22e">einbuch</span> <span style="color:#ae81ff">0.244</span><span style="color:#a6e22e">s</span>
+</span></span></code></pre></div><p>И как не любить наш человеческий мозг после этого. Даже в условиях недостатки информации он
+способен выдать решение, которое на самом деле даже не всегда плохое.</p>
+<p>И такое решение вполне можно увидеть в продакш коде. Не с делением конечно, а в том моменте, что
+<em>вообще мы до конца не разобрались, но вроде работает</em>. Если вы сейчас улыбаетесь, напомню, во первых, как я
+сказал, оно рабоатет, во вторых есть набор тестов.
+Кому как ни вам знать что в прод может поехать фича которая не может похвастаться ни первым ни вторым <code>¯\_(ツ)_/¯</code>.</p>
+<p>Проблемы начинаются тогда, когда цена ошибки становится велика.
+Например когда программа зависият деньги либо даже жизнь человека<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.
+Поэтому такое решение нам не подходит. Тут есть куда копать дальше.</p>
+<h4 id="заключеие">Заключеие</h4>
+<p>Если бы мы, программисты, всегда тщательно читали документацию, то находили бы решение намного быстрее.
+В документации ясно сказано что деление происходит с округлением в сторону отрицательной бессконечности — <code>truncated towards negative infinity</code>. Классическая же операция деления в математике должна работать
+как <code>truncated towards zero</code> или округление в сторону 0.</p>
+<p>Я специально не заострил внимание на последнем предложении из документации и не привёл его перевод.
+Но если вы это заметили — мои поздравления, печенье где-то в нижнем ящике. В любом случае, чёткое понимание проблемы это хоть и большая, но всё же часть решения.</p>
+<p>Хорошо, мы попробовали поделить сдвигом и наткнулись на ошибку, мы смогли замаскировать ошибку и не представляем
+точного механизма происходящего внутри компьютера. Пора это исправить.</p>
+<h2 id="как-устроены-числа-в-компьютере">Как устроены числа в компьютере.</h2>
+<p>Что такое операция сдвига? Почему она работает, или по крайней мере пытается казаться работающей?</p>
+<p>Тему можно разделить. Я бы реально хотел рассказать, а может даже показать как смастерить
+штуковину которая может считать (не хуже по корректности счё), благо какие-нибудь К155ЛА3 (или даже КТ315) найти не составляет труда.
+Но видя как разрастается объем я решил вытащить это в отдельную статью. Тут сосредоточимся только на минимально необходимых знаниях чтобы хватило поделить число на два.</p>
+<p>Когда мы говорим о том что копьютер умеет считать (проводить операции над числами) мы должны понимать что он может хранить эти числа, как они хранится?</p>
+<p>Числа это абстракции, компьютер - реальный предмет нашего мира.
+И для начала нам нужно научиться представлять <em>абстрактное понятие числа</em> используя реальные предметы нашего мира.
+Давайте представим совершенно реальную коробку в которую можно поместить какой-нибудь так же реальный объект, например яблоко или доллар.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Коробка с яблоком
+</span></span><span style="display:flex;"><span>    +---+
+</span></span><span style="display:flex;"><span>    | @ |
+</span></span><span style="display:flex;"><span>    +---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Коробка с двумя яблоками
+</span></span><span style="display:flex;"><span>    +-----+
+</span></span><span style="display:flex;"><span>    | @ @ |
+</span></span><span style="display:flex;"><span>    +-----+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Коробка вообще без яблок
+</span></span><span style="display:flex;"><span>    +---+
+</span></span><span style="display:flex;"><span>    |   |
+</span></span><span style="display:flex;"><span>    +---+
+</span></span></code></pre></div><p>Что нам это даёт? Например мы можем сказать что отсутствие яблока в коробке
+означает число ноль, одно яблоко - число один, два яблока - число два. Чисто технически
+одна коробка имеет ограничение на кол-во яблок которые мы можем туда поместить.
+Чтобы пока не сильно смешивать представление и системы счисления, предположим
+сначала что ограничение действует до девяти яблок включительно и
+чтобы представить числа большие нам понадобиться вторая коробка. Она будет
+хранить второй разряд числа, в нашем случае - десятки.</p>
+<pre tabindex="0"><code>    // Коробка с двумя яблоками во втором разряде и одним яблоком в первом.
+    // Какое это число? Правильно, 21.
+    +-----+---+
+    | @ @ | @ |
+    +-----+---+
+</code></pre><p>Хотя и десятичная СС нам, как людям понятна, но кодировать такое
+предсталвение в реальном устройстве тяжело, и это работает не только на
+таком бутафорском примере. В реальной, например оперативной памяти,
+число кодируется не кол-вом яблоке, а уровнем напряжения, и достаточно тяжело
+физически построить устройство которое бы отличало более чем 2 уровня
+из-за погрешности как измерений, так и отклонения самих устройств
+хранения, достаточно хорошо можно отличать два уровня - напряжение
+около 0 и напряжение отличное от нуля (в схемотехнике обычно используются
+5V или 3.3V, но могут быть и другие). Если это не совсем понятно, просто
+поймите что больше одного яблока в коробку класть не получится.</p>
+<p>Из этого следует что необходимо использовать СС с максимально небольшим значением
+основания (чем меньше основание, тем меньше проблем с реализацией).
+Двоичная СС подходит лучше всего. Так, если мы договорилимся что в коробке может
+либо отсутствовать яблоко, либо присутствовать, но только одно, как представлять числа
+больше чем единица? Точно так же, как в десятичной СС - путём увеличения
+разрядов числа. С десятичными числами один разряд позволяет
+вам представить числа от 0 до 9, а два разряда дадут возможность представить от 0 до 99.
+В двоичной СС, один разряд позволяет нам представить только два числа, 0 и 1. Два разряда дадут возможность представить 4 числа, от 0 до 3, вот так:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>   // Два разряда, в каждом может присутствовать только 0 или 1
+</span></span><span style="display:flex;"><span>   // дают в общей сложности 4 возможных комбинации
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   // Двоичное число   Десятичное
+</span></span><span style="display:flex;"><span>   00                  0
+</span></span><span style="display:flex;"><span>   01                  1
+</span></span><span style="display:flex;"><span>   10                  2
+</span></span><span style="display:flex;"><span>   11                  3
+</span></span></code></pre></div><p>Насколько много чисел можно представить имея 8 разрядов, 16, 32? Посчитаете? Для удобства мы отойдём
+от примера с яблоками и будем говорить что можем положить я коробку либо цифру 0 (яблок нет) либо цифру 1 (яблоко есть).</p>
+<p>Ещё нужно знать что, в вычислительной машине каждое число хранятся в фиксированном кол-ве коробок.
+Так удобно, больше ничего не скажу. То есть в 8 разрядной вычислительной машине даже число 1 будет занимать 8 разрядов<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Мы ещё поговорим с какой стороны начинать записывать число
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Назовём такой набор коробок - регистром, конкретно этот - восьмиразрядний регистр. В каждый разряд регистра мы
+можем положить либо 0 либо 1. Как представить число 0 в таком представлении?
+Очевидно что все разряды должны быть заполнены нулями. А число 255?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Число 0, во все разряды помещены нули.
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Десятичное число 255, восемь единиц в двоичном представлении.
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Остаётся вопрос в какой последовательности записывать число, например число 11 - <code>1011</code>,
+можно разместить двумя разными способами (вы можете попробовать придумать свои):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Можно записывать самый старший разряд в самой левой ячейке, а остальные разряды сразу после.
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Можно записывать самый младший разряд в самой правой ячейке, а остальные разряди сразу после.
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 1 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Второй способ имеет преимущество, так как совпадает со спосбобом записи
+чисел при сложении столбиком который нам, как человекам знаком.</p>
+<p>Вот посмотрите на это:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    0012
+</span></span><span style="display:flex;"><span>   +
+</span></span><span style="display:flex;"><span>    0341
+</span></span><span style="display:flex;"><span>   =
+</span></span><span style="display:flex;"><span>    0353
+</span></span></code></pre></div><p>Вы можете придумать свои версии записи чисел в регистры, но <em>ранними инженерами</em> выбран путь когда запись идёт слева на право, в младший разряд помещается младший разряд числа.</p>
+<p>Чтобы однозначно идентифицировать отдельные разряды в регистре мы их пронумеруем. Раз записываем число
+мы с самой левой ячейки она и будет под номером 0.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Пронумерованные коробки справа на лево.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      7   6   5   4   3   2   1   0
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+    
+</span></span><span style="display:flex;"><span>    |   |   |   |   |   |   |   |   |    
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Коробку с номером 0 будем называть младшим разрядом, коробку номер 7 назовём старшим разрядом.</p>
+<p>Что на счёт сложения таких чисел? Как сложить 25 и 11? Давайте допустим что у нас есть устройство
+которое называется <em>сложитель</em>, <em>считатель</em> или сумматор. Его устройство сейчас нам не важно, главное понять что нн умеет складывать числа столбиком.</p>
+<blockquote>
+<p>Краткий гайд если вы забыли - чтобы сложить числа в столбик,
+запишите числа одно под другим, выровняв их по правому краю (по разрядам: единицы под единицами, десятки под
+десятками и т.д.). Затем начните сложение с единиц, переходя к более старшим разрядам, и не забывайте переносить
+единицу в следующий разряд, если сумма в разряде больше или равна основанию СС.</p></blockquote>
+<p>Сложение 25 и 11:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1 |   // 25
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>PLUS
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 1 |   // 11
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>EQUL
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |   // 36
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Единственное отличие от начальной школы в том, что в школе у нас были дохрена большие тетрадки и вы могли
+всегда найти место чтобы разместить разряд N если он получался больше чем у любого из слагаемых. Компьютер
+же имеет ограниченные блоки хранения и обработки информации и, как пример, наша вычислительная машина не может
+представить число превышающее 255.</p>
+<p>Так, если максимальное число представимое к нашей ЭВМ это <code>255</code>, а что если сложить два числа которые меньше или
+равны 255, но их сумма чисел больше чем 255? Что мы получим? Ну давайте попробуем сложить <code>127 (0111 1111)</code> и <code>171 (1010 1011)</code>,
+если мой калькулятор не врёт должны получить 298. НО.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |   // 127
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>PLUS
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 1 | 0 | 1 | 0 | 1 | 1 |   // 171
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>EQUL
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 1 | 0 | 1 | 0 | 1 | 0 |   // 42?
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p><a href="https://go.dev/play/p/__PmXlkp61T">Пруф</a>. Да, происходит перенос из разряда под индексом 7, но
+переносить некуда и компьютер его просто отбрасывает (так как негде хранить)<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>. И ответ мы получаем по модулю 256. Остаток от деления 298 на 255 как раз и будет 42.</p>
+<p>Хорошая математика да?
+Это недостаток называется <a href="https://en.wikipedia.org/wiki/Integer_overflow">целочисленным переполнением</a>, но
+рассматривать сейчас мы его не будем<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>. Можно сказать что возможность представить в комьютере большие числа есть,
+но для этого нужно использовать больше ячеек памяти, и как вы понимаете и программа сложения будет сложнее.</p>
+<p>Вроде с беззнаковыми числами разобрались. Идём дальше. Ошибка затрагивала отрицательные числа, поэтому нужно понять какого их представление.</p>
+<h2 id="отрицательные-числа">Отрицательные числа</h2>
+<p>Отрицательные числа проходят в начальной школе, но что такое отрицательные числа в представлении копьютера?</p>
+<p>Если в нашей вычислительной машине мы можем сохранять информацию только в ячейках
+и только двумя значениями. Нам необходимо придумать как мы будем хранить знак числа
+в нашем регистре.</p>
+<p>Вариантов на самом деле не много. Думаю очевидно что знак мы можем закодировать используя какой-либо бит в нашем регистре. Больше
+одного не нужно, ведь нужно хранить только два состояния - отрицательное число или нет. Да, просто договоримся,
+что в бите номер N лежит не показатель разряда числа, а указание, отрицательное число или нет.</p>
+<p>Какой бит для этого использовать? Если мы вспомним что складываем числа мы столбиком,
+было бы неудобно имею бит отвечаютщий за знак где-то посередине. Так же исходя
+из того что мы можем получить перенос от 0-го разряда в 1-ый при сложении двух отрицательных
+чисел, то и 0 бит использовать тоже неудобно.</p>
+<p>Получается единственный вариант остаётся крайний правый, 7 бит. Посмотрим на два числа:</p>
+<pre tabindex="0"><code>    // Положительное число 5
+    +---+---+---+---+---+---+---+---+
+    | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
+    +---+---+---+---+---+---+---+---+
+
+    // Отрицательно число 5
+    +---+---+---+---+---+---+---+---+
+    | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 1 |
+    +---+---+---+---+---+---+---+---+
+</code></pre><p>У такого представления есть занятные артефакты. При попытке
+сложить число <code>1111111 (127)</code> и <code>1 (1)</code> мы получим перенос в 7 рязряд, а раз мы договорились что 7 разряд отвечает за знак
+то согласно нашему представлению мы получили число -0.</p>
+<pre tabindex="0"><code>    +---+---+---+---+---+---+---+---+
+    | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | // Это число 1
+  + +---+---+---+---+---+---+---+---+
+    | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | // Это число 127
+    +---+---+---+---+---+---+---+---+
+    | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | // Это число -0?
+    +---+---+---+---+---+---+---+---+
+</code></pre><p>Вспомним границы беззнакового чиала, от 0 до 255. Так как для хранения знака мы выделили один разряд, то границы будут сдвинуты.
+Мы уже не можем представить число 128. Посмотрим на крайние значения:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Положительное число 127
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Ноль
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Минус ноль
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Минус ноль
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+  
+</span></span></code></pre></div><p>Как вы можете догадаться отрицательных чисел столько же сколько и положительных, значит
+положительных от 1 до 127, отрицательных от -1 до -127.</p>
+<p>Если -5 это 129, то получается
+129 вообще нельзя представить с помощью 8-битного знакового числа. А сколько вообще чисел
+использовать не получиттся?</p>
+<p>Видим что знак числа отрицательный, но остальные биты равны 0. И какое-же это число?
+Ну допустим это будет тоже 0, только отрицательный. Сравнения становятся неудобными.</p>
+<p>Какие ещё недостатки есть у такого представления? Как на счёт математики? Попробуем
+поскладывать числа нашим сумматором:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>    // Пример 1. -1 + -2 = -3
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | // Это число -1
+</span></span><span style="display:flex;"><span>  + +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | // Это число -2
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | // Это число 3 (лол что?)
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // Пример 2. -1 + 2 = 1
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | // Это число -1
+</span></span><span style="display:flex;"><span>  + +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | // Это число 2
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>    | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | // Это число -3 (лол что?)
+</span></span><span style="display:flex;"><span>    +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Как видите, это представления совершенно не может быть использовано с сумматором действующим по
+правилу сложения столбиком. В первом примере мы складываем два отрицательных числа, но так как
+седьмой бит у них выставлен в 1 (собственно указание что это отрицательное число) происходит
+перенос, 7 бит становится равным 0 а это, в нашем представлении, уже положительное число.</p>
+<p>Второй пример не менее странный, он показывает что при сложении бОльшего положительного числа
+и меньшего отрицательного всё равно получается отрицательное, что тоже элемент какой-то альтернативной
+математики.</p>
+<p>Если учесть что, конструировать схему для сложения где присутствуют отрицательные числа
+совершенно не хотелось бы (так как это реальные затраты в элементах и сложности схемы),
+выходит что это представление нам совсем не подходит. Значит нам нужно думать о следующем.</p>
+<h2 id="как-изобрести-дополнительный-код-с-нуля">Как изобрести дополнительный код с нуля?</h2>
+<p>Наверное обьяснение о том как работает дополнительного кода и зачем он нужен можно с
+помощью интернет статей. Там такого добра навалом. Если вы понимаете что <code>Дополнительный код для отрицательного числа можно получить инвертированием его двоичного модуля и прибавлением к инверсии единицы</code>
+возможно этот раздел можно пропустить. Если просто рассказать про то как получить
+дополнительный код отрицательного числа у незнакомого с темой человека всегда возникает вопросы - А как это поняли? Как до этого дошли?</p>
+<p>Я совершенно уверен, что небольшой анализ проблемы и горстка рассуждения может привести что мы откроем
+это представление самостоятельно.</p>
+<p>Как мы помним самая главная проблема прошлого представления это то что наш сумматор не работает. Но
+что если изменить нашу логику, не искать представление которое даёт удовлетворительное
+результат сложения, а наоборот, попробовать взять числа засунуть их в сумматор и посмотреть что
+получится приняв математику за истину.</p>
+<p>Тут предлагаю уменшить разрядность нашего регистра до 4, чтобы возможных комбинаций стало только 16, потому что
+желательно обхватить их взглядом все, что для восьмиразрядного регистра с 256 комбинациями достаточно сложно.</p>
+<p>Во вторых вспомним как работает сумматор для беззнаковых чисел. Ниже представлена последовательность где к каждой
+нижележащей строке прибавляется 1.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>0000   0
+</span></span><span style="display:flex;"><span>0001   1
+</span></span><span style="display:flex;"><span>0010   2
+</span></span><span style="display:flex;"><span>0011   3
+</span></span><span style="display:flex;"><span>0100   4
+</span></span><span style="display:flex;"><span>0101   5
+</span></span><span style="display:flex;"><span>0110   6
+</span></span><span style="display:flex;"><span>0111   7
+</span></span><span style="display:flex;"><span>1000   8
+</span></span><span style="display:flex;"><span>1001   9
+</span></span><span style="display:flex;"><span>1010   10
+</span></span><span style="display:flex;"><span>1011   11
+</span></span><span style="display:flex;"><span>1100   12
+</span></span><span style="display:flex;"><span>1101   13
+</span></span><span style="display:flex;"><span>1110   14
+</span></span><span style="display:flex;"><span>1111   15
+</span></span><span style="display:flex;"><span>0000   0   // ПЕРЕПОЛНЕНИЕ, РАЗРЯД 5 ПОТЕРЯН
+</span></span><span style="display:flex;"><span>0001   1
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Мы видим что последовательность зацикливается. При прибавлении единицы к самому наибольшему числу мы получаем
+самое минимальное число.</p>
+<p>Сколько отрицательных чисел мы можем сохранить? Если всего у нас 16 вариантов, один - ноль и 7 положительных
+остаётся 8 слотов для отрицательных:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1000
+</span></span><span style="display:flex;"><span>1001
+</span></span><span style="display:flex;"><span>1010
+</span></span><span style="display:flex;"><span>1011
+</span></span><span style="display:flex;"><span>1100
+</span></span><span style="display:flex;"><span>1101
+</span></span><span style="display:flex;"><span>1110
+</span></span><span style="display:flex;"><span>1111
+</span></span></code></pre></div><p>Как помним из математики в примере <code>-1 + 1</code> хотелось бы получить <code>0</code>. Мы же можем просто посмотреть
+какой набор бит из вышеперечисленного при сложении с единицей даст 0? Если мы такую найдём то это и будет -1.</p>
+<p>Я прибавил единицу ко всем вариантам?</p>
+<pre tabindex="0"><code>1000 + 1 = 1001
+1001 + 1 = 1010
+1010 + 1 = 1011
+1011 + 1 = 1100
+1100 + 1 = 1101
+1101 + 1 = 1110
+1110 + 1 = 1111
+1111 + 1 = 0000
+</code></pre><p>Да, последовательность <code>1111</code> при сложении на сумматоре с <code>0001</code> даёт результат <code>0</code>. Значит мы можем сказать что <code>1111</code> это и есть представление единицы.
+Если вы попробуете придумать предсталение числа -2 используя эту же простую логику у вас получился <code>1110</code>, попробуйте придумать как выглядит -3, -4, -5, -6, -7, -8.
+Так как есть только 8 слотов, мы можем представить числа от -1 до -8. Я думаю стоит остановиться и попробовать посчитать самостоятельно, но если вы сделали вот полная таблица:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>0000 // 0
+</span></span><span style="display:flex;"><span>0001 // 1
+</span></span><span style="display:flex;"><span>0010 // 2
+</span></span><span style="display:flex;"><span>0011 // 3
+</span></span><span style="display:flex;"><span>0100 // 4
+</span></span><span style="display:flex;"><span>0101 // 5
+</span></span><span style="display:flex;"><span>0110 // 6
+</span></span><span style="display:flex;"><span>0111 // 7
+</span></span><span style="display:flex;"><span>1000 // -8
+</span></span><span style="display:flex;"><span>1001 // -7
+</span></span><span style="display:flex;"><span>1010 // -6
+</span></span><span style="display:flex;"><span>1011 // -5
+</span></span><span style="display:flex;"><span>1100 // -4
+</span></span><span style="display:flex;"><span>1101 // -3
+</span></span><span style="display:flex;"><span>1110 // -2
+</span></span><span style="display:flex;"><span>1111 // -1
+</span></span></code></pre></div><p>Мы получаем такое же циклическое представление. Перед тем как мы попробуем математику (по правде сказать нам не нужно проверять как работает сумматор
+на этом представлении потому что мы вывели предсталвение на основе результатов сумматора) можно поговорить о недостатках.</p>
+<p>Самый очевидный это не читаемость, единственное что можно сказать быстро это то что число отрицательное, потому что старший разряд высталвен в 1 - <code>1100</code>.
+Но что это за число по модулю? Пока мы можем только посмотреть в таблицу, таблица говорит что это <code>-4</code>.</p>
+<p>Это представление используется сейчас в всех современных вычислительных машинах. Да даже ваш телефон или компьютер
+с которого вы читаете эту статью используейт именно такую математику.</p>
+<p>Небольшое отступление, в независимости от представления знаковых чисел мы не можем сказать знаковое ли число или нет. Посмотрите на число <code>1111</code>. Это может быть
+как число 15 так и число -1. Мы должны заранее знать как мы работаем с числами, как с числами со знаком либо как с беззнаковыми.</p>
+<h2 id="операции-сдвига">Операции сдвига</h2>
+<p>Осталось разобраться со сдвигом.</p>
+<p>Сначала разберёмся с беззнаковыми числами. Представим число 187 в двоичной системе счисления, это будет <code>10111011</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>     7                           0
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>   | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 |
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Определим сдвиг вправо как операцию где мы в
+каждый <code>N-ый</code> разряд начиная с <code>0</code> помещаем
+значение лежащее сейчас в разряде <code>N+1</code>. За иключением разряда номер <code>7</code>, восьмого по счёту, так как у нас нет девятого разряда и значению
+попросту неоткуда взяться. Поэтому в разряде номер <code>7</code> будет значение <code>0</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Unsigned shift right
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>   | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 |
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span> 0 --&gt;---&gt;---&gt;---&gt;---&gt;---&gt;---&gt;---&gt;
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+    
+</span></span><span style="display:flex;"><span>   | 0 | 1 | 0 | 1 | 1 | 1 | 0 | 1 |    
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>По аналогии, сдвиг в право определим как операцию где мы в
+каждый <code>N-ый</code> разряд начиная с <code>7</code> помещаем
+значение лежащее сейчас в разряде <code>N-1</code>. За иключением разряда номер <code>0</code>, первого по счёту, так как у нас нет <em>минус первого</em> разряда и значению
+также взяться неоткуда. Поэтому в разряде номер <code>0</code> будет значение <code>0</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Unsigned shift left
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>   | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 |
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span><span style="display:flex;"><span>     &lt;---&lt;---&lt;---&lt;---&lt;---&lt;---&lt;---&lt;-- 0
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+    
+</span></span><span style="display:flex;"><span>   | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 0 |    
+</span></span><span style="display:flex;"><span>   +---+---+---+---+---+---+---+---+
+</span></span></code></pre></div><p>Может ли быть эта операция полезна для работы с числами? Как она влияет на <em>значение числа</em>?</p>
+<p>Если вы ещё не догадались, то попробуйте провернуть эту операцию с
+числами в десятичной системе счисления. Например с числом 123 сдвиг
+в право: <code>0123 -&gt; 0012</code>, <code>0012 -&gt; 0001</code>, <code>0012 -&gt; 0001</code>. Ведущие нули
+не влияют на значения, но я привел их для наглядности. Думаю тут не нужно
+много думать чтобы понять, что сдвиг вправо делит число на 10.</p>
+<p>Если провести аналогию то сдвиг в двоичной системе счисления приводит к умножению на два и делению соответственно.</p>
+<p>До каких пор можно сдвигать? Попробуем с делением максимально представимого числа для 8 бит.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// Двоичное       Десятичное
+</span></span><span style="display:flex;"><span>   1111 1111   |  255
+</span></span><span style="display:flex;"><span>   0111 1111   |  127
+</span></span><span style="display:flex;"><span>   0011 1111   |  63
+</span></span><span style="display:flex;"><span>   0001 1111   |  31
+</span></span><span style="display:flex;"><span>   0000 1111   |  15
+</span></span><span style="display:flex;"><span>   0000 0111   |  7
+</span></span><span style="display:flex;"><span>   0000 0011   |  3
+</span></span><span style="display:flex;"><span>   0000 0001   |  1
+</span></span><span style="display:flex;"><span>   0000 0000   |  0
+</span></span></code></pre></div><p>Сдвиг преставления числа 0 всегда будет 0. Что выглядит выглядит корректно так как и
+математики ожидают получило 0 при делении 0 на 2, давайте теперь попробуем со сдвигом влево.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// Двоичное       Десятичное
+</span></span><span style="display:flex;"><span>   0000 0001   |  1
+</span></span><span style="display:flex;"><span>   0000 0010   |  2
+</span></span><span style="display:flex;"><span>   0000 0100   |  4
+</span></span><span style="display:flex;"><span>   0000 1000   |  8
+</span></span><span style="display:flex;"><span>   0001 0000   |  16
+</span></span><span style="display:flex;"><span>   0010 0000   |  32
+</span></span><span style="display:flex;"><span>   0100 0000   |  64
+</span></span><span style="display:flex;"><span>   1000 0000   |  128
+</span></span><span style="display:flex;"><span>   0000 0000   |  0     WAT?
+</span></span></code></pre></div><p>Всё за исключенем последей операции выглядит подозрительно похожее на умножение. Вот только математики негодуют, очевидно, они
+хотели бы получить число 256 но мы, как программисты нашего 8-битного компьютера говорим что
+ответ 0. Тут интуитивно понятно, что
+имея 1 в самом правом разряде, при ещё одном сдвиге для неё не
+остаётся места и она пропадет.</p>
+<p>Да, мы можем обработать такую ситуацию разными способами. Но создание арифметики для чисел произвольной величины
+выходит за рамки этой статьи. Да, эту проблему можно решить, например выделять два байта на число, в
+общем случае может выделять N байтов и представлять числа настолько большие, насколько хватит памяти нашей
+вычислительной машины, но это уже совсем другая история.</p>
+<p>Для мира 8 устройств сказать что умножение беззнакового числа 128 на 2 мы должны получить 0, и мы его получаем.</p>
+<p>Но ошибка происходила на отрицательных числах. Теперь мы уже знаем и о представлении отрицательных чисел и о
+операциях сдвига. Давайте соберём всё воедино.</p>
+<p>Как мы помним, самый левый бит отвечает за наличие знака, и если этот знак присутсвует, то чтобы получить
+значение числа, нужно провести математические операции с оставшимися 7-ю битами.</p>
+<p>Попробуем поделить какое-нибудь отрицательное число которое делилось нормально. Например -2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>0000 0010 // 2
+</span></span><span style="display:flex;"><span>1111 1101 // Инвертируем биты
+</span></span><span style="display:flex;"><span>1111 1110 // Прибавляем единицу, теперь эта последовательность есть число -2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>0111 1111 // Сдвигаем по нашему правилу
+</span></span></code></pre></div><p>Впередии числа идёт теперь 0, значит это уже положительное число, математики уже не довольны. Множество
+единиц в старших разрядах говорит о том что число большое. На самом деле это 127. То есть если мы
+сдвигаем -2 на 1 бит вправо, то получаем 127. Это что угодно, но не операция деления (сноска 3).</p>
+<p>Почему сдвиг сработал с беззнаковыми числами и не работает со знаковыми?</p>
+<p>Потому что мы производим дествие не только с битами которые отвечают за само число, но и с
+битом знака, а это совсем другая сущность, значит и поступать нужно с ней по другому.</p>
+<p>Сначала подумаем что происходит со снаком при делении отрицательного целого числа? Правильно,
+знак сохраняется, при делении на 2 отрицательного числа мы тоже получим отрицательне число
+(за исключенеим деления -1, мы должны получить 0, а это не отрицательное число,
+мы рассмотрим этот случай отдельно).</p>
+<p>Очевидно мы должны ввести новую операцию для нашей вычислительной машины. Работать она должна
+по аналогии с сдвигом, но сохранять 1 в старшем разряде если в исходном значении там была единица.
+Назовём такую операцию <em>знаковый сдвиг</em>.</p>
+<p>Получается что знаковый сдвиг влево будет аналогичем безнаковому сдвигу влево. Но сдвиг вправо
+будет отличаться.</p>
+<p>Теперь же, вооружившись этими знаниями попробуем поделить числа сдвигом.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1111 1110 // -2
+</span></span><span style="display:flex;"><span>1111 1111 // Единица в старшем разряде осталась, так как была в исходном числе.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1111 1111 // Проверяем что это за число, воспользуемся правилом перевода
+</span></span><span style="display:flex;"><span>0000 0000 // Инвертируем биты
+</span></span><span style="display:flex;"><span>0000 0001 // Добавляем единицу, это число 1, но со знаком минус.
+</span></span></code></pre></div><p>То есть сейчас сдвиг дал результат аналогичный делению на 2. Продолжаем, попробуем ещё какие нибудь
+чётные числа.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1001 0010 // 110
+</span></span><span style="display:flex;"><span>1100 1001 // Сдвигаем вправо на 1 бит
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1100 1001 // Проверяем число
+</span></span><span style="display:flex;"><span>0011 0110 // Инвертируем биты
+</span></span><span style="display:flex;"><span>0011 0111 // Добавляем 1, это число 55.
+</span></span></code></pre></div><p>Да, это верно. Проблема была с отрицательными нечётными числами. Попробуем поделить -3.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1111 1101 // -3
+</span></span><span style="display:flex;"><span>1111 1110 // Сдвигаем на один бит. 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1111 1110 // Проверяем
+</span></span><span style="display:flex;"><span>0000 0001 // Инвертируем биты
+</span></span><span style="display:flex;"><span>0000 0010 // Добавляем единицу, это 2, с учётом знака -2. 
+</span></span></code></pre></div><p>Ответ -2 должен был навести на пример из начала мы поделили число и округлили результат в сторону отрицательной бессконечности.
+Таков механизм работы сдвига. И как мы помним мы бы хотели при делении округлять результат в сторону 0 и при делении -3 на 2 получать -1, а не -2.</p>
+<p>Значит это только одно, только сдвига недостаточно. Как можно обойти проблему округления в низ? Например добавить 1 до деления. Тогда для нечётных чисел проблема
+уйдёт, так как они будет делиться уже без округления (четное число делится на 2 без остатка). А четные числа так же не изменятся, так как делиться они будут с
+остатком, но округление произойдёт в сторону отрицательной бессконечности. Единицу нужно добавлять только для отрицательных чисел, потому что с положительными и нулём было всё
+в порядке.</p>
+<p>Попробуем поделить некоторые числа:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// -3 / 2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1111 1101   Это число -3
+</span></span><span style="display:flex;"><span>1111 1110   Прибавляем единицу, так как число отрицательное
+</span></span><span style="display:flex;"><span>1111 1111   Сдвигаем на 1 разряд. Результат -1
+</span></span></code></pre></div><p>Ровно то что мы и хотели. Приводить больше примеров нет смысла, попробуйте самостоятельно.</p>
+<h2 id="решение">Решение</h2>
+<p>На базе всех этих знаний попробуем придумать решение на Go:</p>
+<p>Вспомним наше начальное решение:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isBadNumber</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> &lt; <span style="color:#ae81ff">0</span>) <span style="color:#f92672">&amp;&amp;</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fakedivImproved</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isBadNumber</span>(<span style="color:#a6e22e">a</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Чем же оно плохо? Мы вставляем медленную операцию проверки условия (о)
+как часть операции которая должна выполняться мгновенно. Тут придётся поверить
+на слово, объяснять не буду.</p>
+<p>Проанализируем, насколько мы можем упростить алгоритм. Нам надо избавиться от условий.
+Наши знания представления чисел помогут придумать более совершенный алгоритм.</p>
+<p>Поехали. Если число отрицательное, то к результату мы должны добавить единицу, но
+это сломает деление четных чисел. А что если добавлять единицу всегда до деления? Сейчас мы знаем тонкости
+и видим что это не сломает, если число нечётное мы должны добавить единицу
+без дополнительных действий. Если число чётное, то результат всё равно не
+изменится, так как у всех чётных чисел, нулевой разряд равен 0, а при
+сдвиге вправо его значение всё равно потеряется, поэтому его изменение
+никак на деление не повлияет. Поэтому условние чётности\нечётности можно убрать:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fakedivImproved</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">a</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Уже намного лучше. Но условие осталось. Чтобы от него избавиться
+нам бы получить отдельную переменную которая была бы равна 1
+только если число отрицательное и эту переменную мы можем добавлять
+к а. Что мы помним, все отрицательные числа имеют в старшем разряде единицу.
+Мы можем сдвинуть эту единицу вправо, на 7 разрядов и получить значение один.
+Для всех не отрицательных чисел мы получим значение ноль, так как старший разряд
+у них равер нулю. Заметим только то, что сдвигать нужно логически, а не арифметически, без расспространения знака.</p>
+<p>Это ключевой абзац статьи. Его полное понимание говорит о том, что вы внимательно прочитали статью.</p>
+<p>Завершаем. Мы не можем явно сказать компилятору использовать знаковый или беззнаковый сдвиг, поэтому необходимо
+преобразовать значние а в безннаковый тип соответствующей разрядности:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> uint8(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> int8(<span style="color:#a6e22e">b</span>)) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Этот код и есть ответ на вопрос - как поделить число на два.</p>
+<h2 id="extra">Extra</h2>
+<p>Основная статья закончена. В этом блоке ещё несколько Go-специфичной информации.</p>
+<p>Во первых нужно разобрать деление всех возможных типов целых знаковых чисел, а не только 8 битных. Чтобы
+формально выполнить задачу. И ещё можем посмотреть какой код генерируется самим компилятором.</p>
+<p>Сначала простой вариант, посмотрим что реально делает компьютер<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT    main.div
+</span></span><span style="display:flex;"><span>    MOVL    AX, CX
+</span></span><span style="display:flex;"><span>    SHRB    $7, AL
+</span></span><span style="display:flex;"><span>    ADDL    CX, AX
+</span></span><span style="display:flex;"><span>    SARB    $1, AL
+</span></span><span style="display:flex;"><span>    RET
+</span></span></code></pre></div><p>Что тут происходит? Мы видим 5 инструкций, но само деление происходит только с помощью
+четырёх, инструкция <code>RET</code> нужна для завершения работы функции. Первая инструкция <code>MOVL</code> которая
+копирует из регистра <code>AX</code>, где храниться переданное функции значение в регистр <code>CX</code><sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup>. Далее инструия SHRB выполняет <em>логический</em> праввый сдвиг
+вправо регитра <code>AL</code> на 7 бит. Мы теряем все биты кроме бита кроме знака (сдвинг логический, поэтому остальные разряды выставлены в 0).
+Поэтому в регистре A будет
+значение 1 если число отрицательное или 0 если число не отрицательное.</p>
+<p>Далее в регистр AX помещается сумма регистров <code>CX</code> и <code>AX</code>. Далее мы сдвигает на 1 бит вправо, сдвиг уже знаковый.</p>
+<p>Посмотрим на нашу реализацию:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div</span>(<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> uint8(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> int8(<span style="color:#a6e22e">b</span>)) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT    main.div
+</span></span><span style="display:flex;"><span>    MOVL    AX, CX
+</span></span><span style="display:flex;"><span>    SHRB    $7, AL
+</span></span><span style="display:flex;"><span>    ADDL    CX, AX
+</span></span><span style="display:flex;"><span>    SARB    $1, AL
+</span></span><span style="display:flex;"><span>    RET
+</span></span></code></pre></div><p>Ассемблерный код полностью эквивалентный. Попробуем с всеми возможными типами</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div</span>[<span style="color:#a6e22e">T</span> <span style="color:#66d9ef">int8</span> | <span style="color:#66d9ef">int16</span> | <span style="color:#66d9ef">int32</span> | <span style="color:#66d9ef">int64</span> | <span style="color:#66d9ef">int</span>](<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">T</span>) <span style="color:#a6e22e">T</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Go генерирует различные реализации для каждого типа, посмотрим как выглядит, например, для <code>int16</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT    main.fakedivImproved2[go.shape.int16]
+</span></span><span style="display:flex;"><span>    MOVL    BX, CX
+</span></span><span style="display:flex;"><span>    SHRW    $15, BX
+</span></span><span style="display:flex;"><span>    LEAL    (CX)(BX*1), AX
+</span></span><span style="display:flex;"><span>    SARW    $1, AX
+</span></span><span style="display:flex;"><span>    RET
+</span></span></code></pre></div><p>Всё то же самое. Обратить внимание нужно разве что сдвиг теперь происходит на <code>15 бит</code>. В остальном
+код эквивалентный (использование инструкции LEA из-за того что компилятор передаёт первый аргумент
+через BX, и не хочется после сложения использовать MOV ещё раз, а в LEA могут учавствовать три регистра).</p>
+<p>Попробуем сделать что-то подобное:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div2</span>[<span style="color:#a6e22e">T</span> <span style="color:#66d9ef">int8</span> | <span style="color:#66d9ef">int16</span> | <span style="color:#66d9ef">int32</span> | <span style="color:#66d9ef">int64</span> | <span style="color:#66d9ef">int</span>](<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">T</span>) <span style="color:#a6e22e">T</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">bytesize</span> = <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> (<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Sizeof</span>(<span style="color:#a6e22e">a</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">bytesize</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sign</span> <span style="color:#f92672">:=</span> (uintptr(<span style="color:#a6e22e">a</span>) <span style="color:#f92672">&amp;</span> (uintptr(<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#a6e22e">s</span>)) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">s</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">T</span>(<span style="color:#a6e22e">sign</span>)) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Это максимально приближённо выглядит к реальной реализации. Вот реализация для <code>int32</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT    main.div2[go.shape.int32]
+</span></span><span style="display:flex;"><span>    MOVLQSX BX, CX
+</span></span><span style="display:flex;"><span>    MOVL    $2147483648, DX
+</span></span><span style="display:flex;"><span>    ANDQ    DX, CX
+</span></span><span style="display:flex;"><span>    SHRQ    $31, CX
+</span></span><span style="display:flex;"><span>    LEAL    (BX)(CX*1), AX
+</span></span><span style="display:flex;"><span>    SARL    $1, AX
+</span></span><span style="display:flex;"><span>    RET
+</span></span></code></pre></div><p>Плюс две инструкции. Усложнилось только получение единицы для отрицательных значений. Словили то чувство когда код который прогнали через ассемблер выглядит понятнее чем его же версия на языке
+высокого уровня? Умею могу.</p>
+<p>Да, выглядит немного дико, но я так и не придумал как заставить компилятор сгенерировать беззнаковый сдвиг,
+так как я немогу сконвертировать в <code>unsigned</code> тип соответствующий одному из возможных типов <code>int8/int16/int32/int64/int</code> (в теле функции нужно указать конкретный тип, но конретный тип зависит от. Поэтому <code>uintptr</code>.</p>
+<p>В общем если вы смогли заставить компилятор сгенерировать аналогичные инструкции операции деления на два,
+без встраивания ассеблерных и собственно оператора <code>/</code> то напишите мне, интересно.</p>
+<p>P.S. Разобрался. Система типов ограничена, но есть в спецификации один пункт интересный про
+конверсию знаковых чисел в беззнаковых. Он мне и помог. Понимаете почему это сработает?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">div3</span>[<span style="color:#a6e22e">T</span> <span style="color:#66d9ef">int8</span> | <span style="color:#66d9ef">int16</span> | <span style="color:#66d9ef">int32</span> | <span style="color:#66d9ef">int64</span> | <span style="color:#66d9ef">int</span>](<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">T</span>) <span style="color:#a6e22e">T</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> uint64(<span style="color:#a6e22e">a</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">b</span> <span style="color:#f92672">&gt;&gt;=</span> <span style="color:#ae81ff">63</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">T</span>(<span style="color:#a6e22e">b</span>)) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>И пример кода для <code>int32</code>, те же пять инструкций:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>TEXT    main.div3[go.shape.int32]
+</span></span><span style="display:flex;"><span>    MOVLQSX BX, CX
+</span></span><span style="display:flex;"><span>    SHRQ    $63, CX
+</span></span><span style="display:flex;"><span>    LEAL    (BX)(CX*1), AX
+</span></span><span style="display:flex;"><span>    SARL    $1, AX
+</span></span><span style="display:flex;"><span>    RET
+</span></span></code></pre></div><p>Механизм получения 1 если число отрицательное тут предсталвяет интерес, но я думаю оставлю это на подумать. Попытайтесь
+не гуглить инструкцию <code>MOVLQSX</code>, должно получиться вывести алгоритм её работы самостоятельно.</p>
+<h2 id="заключение">Заключение</h2>
+<p>Если вы прочитали статью вы можете спросить, неужели никто не ответил правильно, ведь совсем не сложно.
+Причина в том что чаще отвечают неправильно, скорее всего, скорость ответа. Не успеваешь прикинуть крайние значения.
+Если бы спросили меня, я бы тоже ответил что нужно сдвинуть
+число на один бит, вероятно я бы нашёл ошибку прокручивая варианты в голове, но точно сказать не могу. Мне
+этот вопрос никто не задавал. Собственно так и выглядит работа программиста на практике. Набросок решения,
+поиск неподходящих вариантов, изучение нижележащих абстракций, если они ещё не знакомы.</p>
+<p>Вот и всё. Ах да, чуть не забыл, не надейтесь что кот будет работать просто так, как видите, по умолчанию он не хочет.</p>
+<h2 id="послесловие-или-деление-на-два-циклом">Послесловие или деление на два циклом</h2>
+<p>Отдельная часть. Просто не знаю куда её поставить. Этого блока бы небыло, если бы не один забавный момент.
+Как я говорил выше, я пробовал не только объяснять ЗАДАЧУ друзьям, но и спрашивать, как бы они её решили.</p>
+<p>И один раз я получил максимально точный ответ. Человек не программист, но решение было достаточно формальное
+чтобы была возможность составить алгоиритм.</p>
+<blockquote>
+<p>— Как бы ты поделил число на два?</p>
+<p>— Можно попробовать вычитать
+делитель из делимого до тех пор, пока делимое больше или
+равно 0. Кол-во вычитаний и будет равно частному.</p></blockquote>
+<p>Давайте представим этот алгоритм в виде неформального описания:</p>
+<pre tabindex="0"><code>ШАГ 0. Создать счётчик делений. Присвоить ему значение 0.
+ШАГ 1. Вычесть делитель из исходного числа.
+ШАГ 2. Если число меньше 0 вернуть счётчик делений.
+ШАГ 3. Прибавить единицу к счётчику делений.
+ШАГ 4. Если результат равен 0 то вернуть счётчик делений
+ШАГ 5. Перейти к шагу 1.
+</code></pre><p>И переведём в реальный код на языке Go:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">rudydiv</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">int8</span>) <span style="color:#66d9ef">int8</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">divisor</span> = <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">x</span> <span style="color:#f92672">-=</span> <span style="color:#a6e22e">divisor</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> &lt; <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">sum</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">sum</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">sum</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Чтож. Это решение не оптимально, даже по сравнению с решением с условием. Так как тут
+присутствует цикл. Отличается не только константа но и асимптотика. Сложность
+этого алгоритма линейная, а не константная как в решении со сдвигом. Но это решение
+корректное.</p>
+<p>Это тоже реальный код, вполне можно увидеть решение в проде. Осообено если инженеры приняли
+решение что исследование всех случаем и нахождением законеомерностей в сложном решении не
+стоит потраченного времени и мы можем взять пусть и не оптимальное, но корректное решение (НЕТ, ОНО НЕ ДЕЛИТ ОТРИЦАТЕЛЬНЫЕ ЧИСЛА, ДА ВЫ ПРАВИЛЬНО ПОНЯЛИ, ЭТО УПРАЖНЕНИЕ).</p>
+<p>Решение с циклом более простое так как не нужно вникать в представление чисел. Так же можете
+наблюдать интересную картину что сложность рождает не дополнительные возможности,
+а скорее производительность решенения.</p>
+<p><img src="/div2.png" alt="How to divide"></p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>А так же используют комьютеры, автомобили, летают самолётами, расплачиваются банковской картой, всего не перечислить, естественно.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>У меня кстати есть <a href="https://github.com/rokkerruslan/i8080">эмулятор</a> микропроцессора i8080. Эта вычислительная машина делить не умеет. И вы можете попробовать
+написать программу деления 8-ми битных чисел на этом микропроцессоре по окончанию
+прочтения статьи. Успех затеи будет означать что вы хорошо освоили тему.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>Вот например компания боинг обнаружила на своём самолёте серии 787 Dreamliner программную ошибку которая может привести к потере
+электропитания самолёта и потенциально отключить оба двигателя - <a href="https://www.availabilitydigest.com/public_articles/1006/787_power_loss.pdf">https://www.availabilitydigest.com/public_articles/1006/787_power_loss.pdf</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>Да, от этой фразы может многих покорёбить, в реальности настолько всё по другому что я даже не буду описывать это в сноске.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p>И тут фраза не корректна. Многие микропроцессоры имеют возможность
+определить что произошло переполнение, чтобы дать программисту возможность обработать ситуацию.
+На проверке этого условия может быть, как пример, построена арифметика на числах рязрядность которых
+превышает разрядность вычислительной машины. Но сейчас это не имеет значения, всё ниженаписанное верно
+даже если бы микропроцессор не обладал такой возможностью.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p>Хотя недостаток мемасный и породил огромное кол-во багов. Многие из них известные.
+Из вики примеры:
+Одним примером является глюк в SimCity 2000: если сумма денег на счету игрока превысит 2 в степени 31, она станет отрицательной, что приведет к поражению. Похожая проблема была в Diablo III, в которой одним из обновлений был повышен лимит максимальной суммы сделок. Если сумма превышала 2 в степени 31, то игрок после завершения сделки оставался с прибылью в 2 степени 32 игровой валюты&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p>Это промежуточное представление, так называемый Go Assembler. Реальные машинные инструкции
+зависят от архитектуры вашего микропроцессора, но будут очень сильно похожи.&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:8">
+<p>Кто бы что не говорил, но херня что инструкция которая <em>копирует</em> значение одного регистра в другое
+называется MOV (move), а не COPY, я считаю одной из самых непоняхных вещей в ассемблере.
+Ещё раз, инстркция MOV ничего не перемещает, происходит именно копирование значения.&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+</div>
+
+
+    </main>
+
+    
+      
+    
+  </body>
+</html>
