@@ -82,7 +82,7 @@
 <p>Вполне вероятно, что вывод примеров и команд будет
 зависеть от версии компилятора и операционной системы. Я запускаю на:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>go env GOVERSION GOARCH GOOS
-</span></span><span style="display:flex;"><span>devel go1.19
+</span></span><span style="display:flex;"><span>go1.19
 </span></span><span style="display:flex;"><span>amd64
 </span></span><span style="display:flex;"><span>linux
 </span></span></code></pre></div><p>С введением всё.</p>
@@ -602,13 +602,13 @@ runtime может попытаться считать значение ёмко
 какому смещению живёт оригинал пароля, то может подменить его своим.</p>
 </li>
 </ul>
-<h2 id="часть-4-правильный-способ">Часть 4. &ldquo;Правильный&rdquo; способ</h2>
+<h2 id="часть-4-правильный-способ">Часть 4. «Правильный» способ</h2>
 <p>Один из лучших способов повысить свой уровень — учиться у
 старших.</p>
 <p>Компилятор — это не только инструмент для сборки программ на Go, но и
 огромный набор примеров кода. Если вы
-хотите изучить некий алгоритм, начать поиски с исходного
-кода компилятора — неплохая точка входа. Нам же даже искать не надо,
+хотите изучить некий алгоритм, исходники Go (компилятора и runtime) —
+неплохая точка входа. Нам же даже искать не надо,
 мы уже видели нужный нам код.</p>
 <p>Помним, что есть функция <code>slicebytetostring</code>. Она выделяет место в памяти для
 нижележащего массива, а потом копирует туда элементы исходного массива. Но это
@@ -629,15 +629,14 @@ runtime может попытаться считать значение ёмко
 </span></span></code></pre></div><p>Заголовок строки создаётся внутри функции <code>slicebytetostring</code>. Поля <code>str</code> и <code>len</code>
 заполняются явно, новыми значениями. Значение поля <code>str</code> — это указатель на нововыделенный
 участок памяти, значение поля <code>len</code> — это длина участка памяти.</p>
-<p>Слово &ldquo;правильный&rdquo; звучит так себе, лучше скажем <em>более безопасный</em>, так вот это
-более безопасный способ преобразовать строку в слайс и обратно, без аллокации и копирования
-нижележащего массива (но будьте внимательны, спать нельзя даже тут, потому что и
-в его использовании можно накосячить<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup>).</p>
-<p>Идея заключается в том, что мы конструируем заголовки (и строки, и слайса)
-самостоятельно и копируем поля из структуры, из которой мы преобразовываем, в
-только что созданную структуру.</p>
-<p>Используем подход <code>slicebytetostring</code>, структуры слайса и строки можно найти в
-пакете <code>reflect</code>:</p>
+<p>Слово «правильный» звучит так себе, лучше скажем <em>более безопасный</em>. Это способ
+преобразовать строку в слайс и обратно без аллокации и копирования нижележащего
+массива. Но будьте внимательны: спать нельзя даже тут, и в его использовании можно
+накосячить<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup>.</p>
+<p>Идея в том, что мы сами конструируем заголовок (строки или слайса) и копируем
+в него поля из исходного.</p>
+<p>Используем подход <code>slicebytetostring</code>. Структуры, описывающие заголовки слайса
+и строки, есть в пакете <code>reflect</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Конверсия из слайса в строку.</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">btos</span>(<span style="color:#a6e22e">in</span> []<span style="color:#66d9ef">byte</span>) (<span style="color:#a6e22e">out</span> <span style="color:#66d9ef">string</span>) {
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">slice</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">SliceHeader</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">in</span>))
@@ -658,24 +657,39 @@ runtime может попытаться считать значение ёмко
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Подход не отличается концептуально, использование unsafe остаётся, формально осталось и
+</span></span></code></pre></div><p>Концептуально подход не отличается: <code>unsafe</code> остаётся, а формально остаётся и
 нарушение системы типов, ведь <code>reflect.SliceHeader</code> — это не <code>runtime.slice</code>. Если их
-представление в памяти не будет совпадать, то будет плохо, хотя это маловероятно и
-говорит о баге в коде компилятора/runtime-а.</p>
+представление в памяти разойдётся, всё сломается. Пока это маловероятно, но
+документация <code>reflect</code> прямо предупреждает, что такое возможно.</p>
 <p>Но мы больше не интерпретируем блок памяти от заголовка слайса как блок памяти
 заголовка строки. Мы создаём новый заголовок для слайса байт, а далее заполняем
 его поля руками. Устойчивее ли этот подход к ошибкам? Да. Стоит оговориться: вы
 создаёте новый объект, и где он окажется, на стеке или в куче, решаете не вы,
 а компилятор<sup id="fnref:15"><a href="#fn:15" class="footnote-ref" role="doc-noteref">15</a></sup>.</p>
+<p><strong>Обновление.</strong> В Go 1.20 в пакете <code>unsafe</code> появились функции <code>String</code>, <code>StringData</code>
+и <code>SliceData</code> (<code>unsafe.Slice</code> есть ещё с Go 1.17), а в Go 1.21 <code>reflect.SliceHeader</code>
+и <code>reflect.StringHeader</code> объявлены устаревшими. Поле <code>Data</code> у них имеет тип <code>uintptr</code>,
+и сборщик мусора не считает его указателем. Новые функции работают с типизированным
+указателем <code>*byte</code>, поэтому сегодня те же конверсии пишутся так:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Конверсия из слайса в строку.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">btos</span>(<span style="color:#a6e22e">in</span> []<span style="color:#66d9ef">byte</span>) <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">String</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">SliceData</span>(<span style="color:#a6e22e">in</span>), len(<span style="color:#a6e22e">in</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Конверсия из строки в слайс байт.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">stob</span>(<span style="color:#a6e22e">in</span> <span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">byte</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Slice</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">StringData</span>(<span style="color:#a6e22e">in</span>), len(<span style="color:#a6e22e">in</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Ограничение прежнее: пока существует строка, байты, на которые она смотрит, менять нельзя.</p>
 <p>Сложность реального процесса и изначальное представление строк как неизменяемых типов приводят
-к тому, что функциональности конверсии (без выделения памяти и копирования) нет
-в стандартной библиотеке Go, по крайней мере, это так со
-<a href="https://github.com/golang/go/issues/25484#issuecomment-390846454">слов разработчиков</a>.</p>
-<p>Особняком стоит проблема, что язык Go, а именно компилятор языка, не
-подталкивает вас к правильному решению<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>. Для компилятора все способы одинаковые,
-пока это компилируется, а, как видели мы выше, компилируется не значит работает.
-Даже работает не значит <em>корректно работает</em>. Корректную же работу должен
-обеспечить программист. Не надейтесь, что кот будет работать просто так.</p>
+к тому, что безопасной функции конверсии (без выделения памяти и копирования)
+в стандартной библиотеке Go нет — только <code>unsafe</code>-версия из обновления выше. Со
+<a href="https://github.com/golang/go/issues/25484#issuecomment-390846454">слов разработчиков</a>,
+так задумано.</p>
+<p>Отдельная проблема в том, что компилятор Go не подталкивает вас к правильному
+решению<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>. Для него все способы одинаковы, пока код компилируется, а, как мы
+видели выше, «компилируется» не значит «работает». И даже «работает» не значит
+«<em>корректно</em> работает». Корректную работу должен обеспечить программист. Не надейтесь, что кот будет работать просто так.</p>
 <h2 id="заключение">Заключение</h2>
 <p>Заключения нет. Делитесь и распространяйте статью. С вас лайк, подписка и, конечно
 же, не забудьте нажать на <em>колокольчик</em> дабы не пропустить новые&hellip;</p>
