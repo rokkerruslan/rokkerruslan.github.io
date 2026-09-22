@@ -80,12 +80,14 @@
 <p>Я рекомендую экспериментировать с примерами самостоятельно до момента полного
 их понимания.</p>
 <p>Вполне вероятно, что вывод примеров и команд будет
-зависеть от версии компилятора и операционной системы. Я запускаю на:</p>
+зависеть от версии компилятора и операционной системы. Примеры из частей 1 и 2
+я запускал на:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>go env GOVERSION GOARCH GOOS
 </span></span><span style="display:flex;"><span>go1.19
 </span></span><span style="display:flex;"><span>amd64
 </span></span><span style="display:flex;"><span>linux
-</span></span></code></pre></div><p>С введением всё.</p>
+</span></span></code></pre></div><p>а вывод примеров из части 3 снят на macOS (go1.19, darwin/arm64).</p>
+<p>С введением всё.</p>
 <h2 id="часть-1-поствведение">Часть 1. Поствведение</h2>
 <p>Преобразование одних данных в другие — это одна из самых распространённых задач в
 программировании. Пример, с которого мы начнём, не будет отличаться оригинальностью или вычурностью.
@@ -110,18 +112,18 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// 123</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// 456</span>
 </span></span></code></pre></div><p>Структура данных, представляющая последовательность байт, в языке Go — это
-<a href="https://go.dev/ref/spec#Array_types">Array</a> и реализованный на его базе тип
-<a href="https://go.dev/ref/spec#Slice_types">Slice</a>, slice может изменять размер в
-процессе работы программы. Некоторые
-примеры требуют изменения размера, поэтому мы
-используем именно его.
+<a href="https://go.dev/ref/spec#Array_types">Array</a> и построенный поверх него
+<a href="https://go.dev/ref/spec#Slice_types">Slice</a>. Длина массива фиксирована и входит в его тип,
+а длина слайса может меняться в процессе работы программы: в пределах ёмкости, а когда
+её не хватает, <code>append</code> переносит данные в новый массив. Некоторые примеры требуют
+изменения длины, поэтому мы используем именно слайс.
 С типами входных данных определились, едем дальше.</p>
 <p>Алгоритм. На каждой итерации цикла копируем из источника данные в заранее выделенное место,
 обрабатываем их, преобразуя в <em>число</em>, далее проводим вычисления с этим числом.
 В первом приближении решение будет выглядеть так<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// allocate buf</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// loop</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">ReadFrom</span>(<span style="color:#a6e22e">buf</span>[:])
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">buf</span>[:])
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">// ...</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseUint</span>(<span style="color:#a6e22e">buf</span>[:<span style="color:#a6e22e">n</span>], <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
 </span></span><span style="display:flex;"><span>	<span style="color:#75715e">// use v</span>
@@ -133,11 +135,12 @@
 даже название: <code>strconv</code> расшифруем как <em>строка, конвертируй</em>.</p>
 <p>Для того чтобы понять, что делать дальше, нужно погуглить <a href="https://go.dev/ref/spec">ref/spec</a>
 по ключевым словам <code>slice</code>, <code>string</code>, <code>conversion</code>.
-И в Go есть механизм, позволяющий <em>изменить</em> один тип данных на другой, называется он —
-<a href="https://go.dev/ref/spec#Conversions">Type Conversions</a>. Синтаксис одинаков
-для всех пар типов: имя типа, выражение в скобках — <code>Type(Expression)</code>. Правило,
-по которому происходит конверсия,
-отличается от пары к паре (если оно вообще реализовано).
+И в Go есть механизм, позволяющий <em>преобразовать</em> значение одного типа в значение другого,
+называется он — <a href="https://go.dev/ref/spec#Conversions">Conversions</a>. Синтаксис одинаков
+для всех пар типов: имя типа, выражение в скобках — <code>Type(Expression)</code> (если тип
+начинается с <code>*</code>, его самого тоже придётся взять в скобки: <code>(*T)(x)</code>). Правило,
+по которому происходит конверсия, отличается от пары к паре (если такая конверсия
+вообще разрешена).
 Необходимое нам правило есть в языке:</p>
 <blockquote>
 <p>Converting a slice of bytes to a string type yields a string whose successive bytes are the elements of the slice.</p>
@@ -178,8 +181,7 @@
 </blockquote>
 <p>Раз реализации здесь нет, искать нужно в другом месте. Другой способ — это посмотреть
 на готовую программу и её машинный код. Или, ещё лучше, попросить
-компилятор предоставить нам промежуточное ассемблерное представление, а
-не исполняемый файл. Прелесть современных инструментов программиста.</p>
+компилятор показать ассемблерный листинг кода, который он генерирует. Прелесть современных инструментов программиста.</p>
 <p>Один из вариантов для Go — это запуск команды <code>GOOS=linux GOARCH=amd64 go build -gcflags=-S</code><sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.
 Команда выводит много лишней для нас информации. Интересует нас только вызов функции
 <code>strconv.ParseUint</code> и <em>вычисление её аргументов</em>, так как строка — один из них.</p>
@@ -187,8 +189,8 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>	<span style="color:#75715e">// strconv.ParseUint(string(buf[:n]), 10, 64)
 </span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#66d9ef">runtime.slicebytetostring</span> <span style="color:#75715e">; После вызова регистры AX/BX будут содержать строку.
-</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#66d9ef">$10</span>, <span style="color:#66d9ef">CX</span> <span style="color:#75715e">; Положить число 10 в регистр C
-</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#66d9ef">$64</span>, <span style="color:#66d9ef">DI</span> <span style="color:#75715e">; Положить число 64 в регистр D
+</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#66d9ef">$10</span>, <span style="color:#66d9ef">CX</span> <span style="color:#75715e">; Положить число 10 в регистр CX
+</span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#66d9ef">$64</span>, <span style="color:#66d9ef">DI</span> <span style="color:#75715e">; Положить число 64 в регистр DI
 </span></span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#66d9ef">strconv.ParseUint</span>
 </span></span></code></pre></div><p>Обратить внимание нужно только на вызов функции <code>runtime.slicebytetostring</code>. Именно
 эта функция конвертирует байт слайс в строку<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>.</p>
@@ -216,7 +218,8 @@
 (число уже распаршено и обработано) после завершения очередной итерации цикла и также не предполагает
 дальнейшее использование строки. Слайс байт мы можем переиспользовать явно, а что со строкой?</p>
 <p>Мы всё равно её конструируем, выделяем память (в некоторых случаях),
-копируем содержимое слайса в место, выделенное под строку (безальтернативно).
+копируем содержимое слайса в место, выделенное под строку (всегда, кроме строк длиной
+0 и 1: для них у runtime есть заготовки).
 И так на каждой итерации. Нагружаем runtime бесполезной работой:
 аллокатору нужно процессорное время, а отслеживание выделенных объектов и их
 освобождение сборщиком мусора тоже тратит ресурсы CPU.</p>
@@ -324,8 +327,9 @@
 посмотреть, что там лежит:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(dlv) examinemem -fmt hex -size 1 -count 6 0x000000000046f668
 </span></span><span style="display:flex;"><span>  0x46f668:   0x66   0x6f   0x6f   0x62   0x61   0x72 // f o o b a r -&gt; foobar
-</span></span></code></pre></div><p>Судя по документации, delve не поддерживает формат char или что-то вроде того,
-так что декодируйте в уме.</p>
+</span></span></code></pre></div><p>Судя по документации, на момент написания delve не поддерживал формат char или что-то
+вроде того, так что декодируйте в уме. Начиная с delve 1.24 можно попросить
+<code>examinemem -fmt raw -count 6 0x000000000046f668</code> — байты выведутся как есть, то есть <code>foobar</code>.</p>
 <p>Так, хорошо, со строками разобрались. А что из себя представляет байт слайс?</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(dlv) examinemem -fmt hex -size 1 -count 24 0xc000052730
 </span></span><span style="display:flex;"><span>  0xc000052730:   0x12   0x27   0x05   0x00   0xc0   0x00   0x00   0x00   
@@ -368,7 +372,7 @@ Pointer. А <em>underlying type</em> самого Pointer — тоже Pointer, 
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">pointerToString</span> <span style="color:#f92672">:=</span> (<span style="color:#f92672">*</span><span style="color:#66d9ef">string</span>)(<span style="color:#a6e22e">pointerToByteSlice</span>)
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">str</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pointerToString</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;val=%q type=%T\n&#34;</span>, <span style="color:#a6e22e">str</span>, <span style="color:#a6e22e">str</span>) <span style="color:#75715e">// val=&#34;Hell&#34; type=string</span>
-</span></span></code></pre></div><p>Runtime читает строку так же, как слайс: первые 8 байт — адрес, по которому
+</span></span></code></pre></div><p>Код, который генерирует компилятор, читает строку так же, как слайс: первые 8 байт — адрес, по которому
 лежат байты нашей строки, следующие 8 байт — длина. У слайса на тех же местах
 лежат ровно те же поля. Как мы видели в реализации
 функции <code>slicebytetostring</code>, содержимое слайса байт не проходит никакой обработки
@@ -381,12 +385,13 @@ Pointer. А <em>underlying type</em> самого Pointer — тоже Pointer, 
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;type=%T val=%v&#34;</span>, <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">v</span>) <span style="color:#75715e">// type=uint64 val=1234</span>
 </span></span></code></pre></div><p>А без <code>unsafe</code> можно? Нет.
 Правила конверсии указателя на слайс в указатель на строку не существует. Как-то так:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(*string)(&amp;buf)                 // Cannot convert an expression of the type &#39;*[]byte&#39; to the type &#39;*string&#39;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(*string)(&amp;buf)                 // cannot convert &amp;buf (value of type *[]byte) to type *string
 </span></span><span style="display:flex;"><span>(*string)(unsafe.Pointer(&amp;buf)) // This is fine 🔥
 </span></span></code></pre></div><p>Что мы получаем в итоге? Вызов функции <code>slicebytetostring</code>, потенциальная аллокация и копирование
-заменены взятием адреса и разыменованием:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#a6e22e">MOVQ</span>  <span style="color:#ae81ff">32</span>(<span style="color:#66d9ef">SP</span>),  <span style="color:#66d9ef">AX</span>     <span style="color:#75715e">; Взять адрес и положить в AX
-</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">MOVQ</span>  <span style="color:#66d9ef">AX</span>,      <span style="color:#ae81ff">24</span>(<span style="color:#66d9ef">SP</span>) <span style="color:#75715e">; Сохранить адрес в SP по смещению 24
+заменены взятием адреса и разыменованием, а в машинном коде это просто пересылка
+слов в памяти, например:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#a6e22e">MOVQ</span>  <span style="color:#ae81ff">32</span>(<span style="color:#66d9ef">SP</span>),  <span style="color:#66d9ef">AX</span>     <span style="color:#75715e">; Загрузить из стека (SP+32) указатель на байты слайса
+</span></span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">MOVQ</span>  <span style="color:#66d9ef">AX</span>,      <span style="color:#ae81ff">24</span>(<span style="color:#66d9ef">SP</span>) <span style="color:#75715e">; Записать его в стек (SP+24) — в поле указателя строки
 </span></span></span></code></pre></div><p>Этого точно не будет в отчёте <code>pprof</code>.</p>
 <h2 id="часть-3-а-как-же-строки">Часть 3. А как же строки?</h2>
 <blockquote>
@@ -407,7 +412,7 @@ Pointer. А <em>underlying type</em> самого Pointer — тоже Pointer, 
 дорогой и начать вот с этих самых <em>неизменяемых</em> строк. Например, что насчёт
 <a href="https://go.dev/ref/spec#String_literals">литерала</a> строки?</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>here := &#34;Hello, Go!&#34;
-</span></span><span style="display:flex;"><span>here[0] = 1 // Compile time error: Cannot assign to here[0]
+</span></span><span style="display:flex;"><span>here[0] = 1 // cannot assign to here[0] (value of type byte)
 </span></span></code></pre></div><p>И правда. Изменить строку не даёт уже компилятор.</p>
 <blockquote>
 <p><em>Ты когда-нибудь Segmentation Fault на Go видел? И я не видел, а он — есть<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></em>:</p>
@@ -443,11 +448,13 @@ Pointer. А <em>underlying type</em> самого Pointer — тоже Pointer, 
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Это работает, Гарольд. Получается, что не все строки такие уж
 неизменяемые: некоторые из них изменить можно
-(<a href="https://go.dev/play/p/YeZAO4Mhmdy">Playground</a>). Изменяемы те, что живут в куче,
-неизменяемы те, что живут в коде программы<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>.</p>
-<p>Конструкция <code>[]byte(&lt;str&gt;)</code> заставляет компилятор вставить вызов <code>stringtoslicebyte</code> — функции,
-обратной <code>slicebytetostring</code>: в изменяемой памяти процесса появится массив длиной в строку, куда будут скопированы
-элементы строки (из сегмента неизменяемой памяти). Преобразование результата в строку тоже
+(<a href="https://go.dev/play/p/YeZAO4Mhmdy">Playground</a>). Изменяемы те, что лежат в изменяемой
+памяти — в куче или на стеке, неизменяемы те, что лежат в памяти только для чтения,
+которая загружается из исполняемого файла вместе с кодом программы<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>.</p>
+<p>Конструкция <code>[]byte(&lt;str&gt;)</code> заставляет компилятор выделить в изменяемой памяти процесса
+массив длиной в строку и скопировать туда её байты (из сегмента неизменяемой памяти).
+Для константной строки, как в примере, компилятор делает это сам, для остальных вызывает
+<code>runtime.stringtoslicebyte</code>. Преобразование результата в строку тоже
 происходит уже во время выполнения программы, и runtime-у нужно сконструировать строку
 из слайса, поэтому она уже не может быть помещена в сегмент неизменяемой памяти.</p>
 <p>Версия для <a href="https://go.dev/play/p/MNwXW4k9wxw">собеседований</a>. Запомните или запишите:</p>
@@ -501,15 +508,16 @@ Pointer. А <em>underlying type</em> самого Pointer — тоже Pointer, 
 </span></span></code></pre></div><p>Длина равна шести. Ожидаемо. Ёмкость равна&hellip; Один миллион&hellip; не, один миллиард&hellip; — <em>очень много</em>. Шести не равно.
 Ответы 0, 6 и 42 пояснения не требуют, но 1374390628136?</p>
 <p>Мы не создаём <code>[]byte</code> явно. Когда мы говорим, что по адресу, к примеру, <code>0xff0000</code>, лежит байт слайс,
-runtime может попытаться считать значение ёмкости по смещению <code>0xff0000</code> плюс <code>0x10</code>. Но этот
-участок памяти ему уже не принадлежит. Если заголовок строки находился на стеке функции,
+то <code>cap(out)</code> просто прочитает 8 байт по адресу <code>0xff0000</code> плюс <code>0x10</code>. Но этот
+участок памяти заголовку уже не принадлежит. Если заголовок строки находился на стеке функции,
 то после заголовка может лежать другая переменная. Если заголовок был выделен в куче, то
 участок после заголовка строки может принадлежать совершенно другой переменной, выделенной ранее где-то
 в программе.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// Заголовок строки в памяти.
-</span></span><span style="display:flex;"><span>0xff0000 0x00000001006a8fd0
-</span></span><span style="display:flex;"><span>0xff0008 0x0000000000000006
-</span></span><span style="display:flex;"><span>// Выделенная память аллокатором для переменной X=1374390628136 в другом участке программы.
+</span></span><span style="display:flex;"><span>0xff0000 0x000001400001c0a0 // указатель на байты строки (в куче)
+</span></span><span style="display:flex;"><span>0xff0008 0x0000000000000006 // длина
+</span></span><span style="display:flex;"><span>// Дальше лежит уже что-то чужое. По виду это указатель на объект в куче:
+</span></span><span style="display:flex;"><span>// 0x1400010af28 = 1374390628136. Его мы и прочитаем как ёмкость.
 </span></span><span style="display:flex;"><span>0xff0010 0x000001400010af28
 </span></span></code></pre></div><p>Мы не контролируем значение ёмкости получившегося слайса. Значение может быть совершенно
 случайным. В зависимости от того, что уже успел навыделять аллокатор.
@@ -579,12 +587,15 @@ runtime может попытаться считать значение ёмко
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  xY�\�@�`@`�P@/Users/rokkerruslan/w/secret.maxfilesperprocIp // Так, а это что такое? Мак?
 </span></span><span style="display:flex;"><span>@
-</span></span></code></pre></div><p>В воздухе давно витает слово «уязвимость». Не смотрите, что в выводе много лишней информации:
+</span></span></code></pre></div><p>Это вывод с macOS. На другой машине ёмкость может оказаться меньше миллиона — тогда
+сработает проверка границ, и программа упадёт с <code>slice bounds out of range</code>. Проверка на
+месте, просто сверяется она с поддельной ёмкостью.</p>
+<p>В воздухе давно витает слово «уязвимость». Не смотрите, что в выводе много лишней информации:
 пароли и другие секреты обычно выделяются на фоне остального мусора, их легко
 заметить. А некоторые строки вообще по структуре можно
 искать, примерно так выглядят все AccessKeyID от AWS — <code>AKIAJOPAGANGNAMSTYLE</code>.</p>
 <p>Если вам кажется, что это нереалистичный сценарий, то всё-таки кажется. У этого
-типа ошибок своё название есть — <a href="https://en.wikipedia.org/wiki/Buffer_overflow">Buffer Overflow</a>.</p>
+типа ошибок своё название есть — <a href="https://en.wikipedia.org/wiki/Buffer_over-read">Buffer Over-read</a>.</p>
 <p>Подумаем. Программа может:</p>
 <ul>
 <li>
@@ -595,7 +606,8 @@ runtime может попытаться считать значение ёмко
 <li>
 <p>Как показано выше, атакующий может вычитать область памяти, где лежит
 чувствительная информация: явки/пароли из стека горутины и стеков других
-горутин — вплоть до всей памяти процесса.</p>
+горутин — всё, что лежит в памяти подряд за строкой, пока чтение не упрётся в
+неотображённую страницу.</p>
 </li>
 <li>
 <p>Атакующий может изменить чужую область памяти на своё значение. Например, если он знает, по
@@ -611,7 +623,7 @@ runtime может попытаться считать значение ёмко
 неплохая точка входа. Нам же даже искать не надо,
 мы уже видели нужный нам код.</p>
 <p>Помним, что есть функция <code>slicebytetostring</code>. Она выделяет место в памяти для
-нижележащего массива, а потом копирует туда элементы исходного массива. Но это
+нижележащего массива (или берёт переданный буфер), а потом копирует туда элементы исходного массива. Но это
 только часть, а что с самой структурой данных заголовка строки?</p>
 <p>Посмотрим на реализацию ещё раз:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">slicebytetostring</span>(<span style="color:#a6e22e">buf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">tmpBuf</span>, <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">n</span> <span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">str</span> <span style="color:#66d9ef">string</span>) {
@@ -627,8 +639,8 @@ runtime может попытаться считать значение ёмко
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Заголовок строки создаётся внутри функции <code>slicebytetostring</code>. Поля <code>str</code> и <code>len</code>
-заполняются явно, новыми значениями. Значение поля <code>str</code> — это указатель на нововыделенный
-участок памяти, значение поля <code>len</code> — это длина участка памяти.</p>
+заполняются явно, новыми значениями. Значение поля <code>str</code> — это указатель на выделенный (или
+переданный) участок памяти, значение поля <code>len</code> — это длина участка памяти.</p>
 <p>Слово «правильный» звучит так себе, лучше скажем <em>более безопасный</em>. Это способ
 преобразовать строку в слайс и обратно без аллокации и копирования нижележащего
 массива. Но будьте внимательны: спать нельзя даже тут, и в его использовании можно
@@ -662,8 +674,12 @@ runtime может попытаться считать значение ёмко
 представление в памяти разойдётся, всё сломается. Пока это маловероятно, но
 документация <code>reflect</code> прямо предупреждает, что такое возможно.</p>
 <p>Но мы больше не интерпретируем блок памяти от заголовка слайса как блок памяти
-заголовка строки. Мы создаём новый заголовок для слайса байт, а далее заполняем
-его поля руками. Устойчивее ли этот подход к ошибкам? Да. Стоит оговориться: вы
+заголовка строки. Мы создаём новый заголовок, строки или слайса, и заполняем его
+поля руками. Устойчивее ли этот подход к ошибкам? Для конверсии строки в слайс — да:
+ёмкость мы задаём явно, а не читаем из памяти за заголовком строки, как в части 3.
+Для обратной конверсии разницы почти нет: заголовок строки совпадает с началом
+заголовка слайса, поэтому <code>*(*string)(unsafe.Pointer(&amp;buf))</code> тоже корректен — именно
+так с Go 1.10 по 1.19 был написан <code>strings.Builder.String()</code>. Стоит оговориться: вы
 создаёте новый объект, и где он окажется, на стеке или в куче, решаете не вы,
 а компилятор<sup id="fnref:15"><a href="#fn:15" class="footnote-ref" role="doc-noteref">15</a></sup>.</p>
 <p><strong>Обновление.</strong> В Go 1.20 в пакете <code>unsafe</code> появились функции <code>String</code>, <code>StringData</code>
@@ -680,7 +696,9 @@ runtime может попытаться считать значение ёмко
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">stob</span>(<span style="color:#a6e22e">in</span> <span style="color:#66d9ef">string</span>) []<span style="color:#66d9ef">byte</span> {
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Slice</span>(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">StringData</span>(<span style="color:#a6e22e">in</span>), len(<span style="color:#a6e22e">in</span>))
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Ограничение прежнее: пока существует строка, байты, на которые она смотрит, менять нельзя.</p>
+</span></span></code></pre></div><p>Ограничения прежние: байты, переданные в <code>btos</code>, нельзя менять, пока существует
+полученная строка, а слайс, полученный из <code>stob</code>, нельзя менять вообще — строка может
+лежать в памяти только для чтения, как литерал из части 3.</p>
 <p>Сложность реального процесса и изначальное представление строк как неизменяемых типов приводят
 к тому, что безопасной функции конверсии (без выделения памяти и копирования)
 в стандартной библиотеке Go нет — только <code>unsafe</code>-версия из обновления выше. Со
@@ -705,7 +723,7 @@ runtime может попытаться считать значение ёмко
 <li id="fn:2">
 <p>Разбиение потока на отдельные сообщения или, по-другому, —
 <a href="https://blog.stephencleary.com/2009/04/message-framing.html">message framing</a>,
-мы оставим за бортом. Предположим, что одна операция чтения (вызов ReadFrom) возвращает одно сообщение,
+мы оставим за бортом. Предположим, что одна операция чтения (вызов Read) возвращает одно сообщение,
 которое в свою очередь содержит одно число и оно точно поместится в отведённый буфер.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
@@ -726,7 +744,8 @@ runtime может попытаться считать значение ёмко
 <p>Если вы, как и я, из поколения IDE. А если нет, то и сами знаете, как найти.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
-<p>Команда <code>build -gcflags=-S</code> выводит промежуточное представление — Go-ассемблер.
+<p>Команда <code>build -gcflags=-S</code> печатает код, сгенерированный компилятором, в синтаксисе
+Go-ассемблера — это почти один в один итоговые машинные инструкции.
 Мы не будем подробно на нём останавливаться. Его знание
 не играет роли для понимания статьи, <code>MOVL $1, AX</code> — это <em>копирование</em> значения <em>один</em> в
 регистр <code>AX</code>, и этого достаточно. Если же вы хотите более подробно изучить его, начать
@@ -736,11 +755,11 @@ runtime может попытаться считать значение ёмко
 <p>По первым отзывам на статью я понял, что углубляться в ассемблер — плохо. Читаемость
 падает. В результате я сильно сократил ассемблерные вставки и их объяснение. В этом случае
 не нужно знать, как именно строка становится аргументом. Но в сноске поговорим подробнее.
-В Go недавно изменили способ передачи аргументов в функции. Как видите,
-сейчас на <code>amd64</code> они передаются через регистры (блоки памяти внутри микропроцессора).
-Первый аргумент (слева направо в сигнатуре функции) через регистр <code>AX</code>, второй через <code>BX</code>,
-третий и четвёртый <code>CX</code> и <code>DI</code> соответственно. С возвращаемыми значениями ситуация
-аналогична.
+В Go 1.17 изменили способ передачи аргументов в функции. Как видите, теперь на <code>amd64</code>
+они передаются не через стек, а через регистры (ячейки хранения внутри самого процессора).
+Регистры раздаются по машинным словам, слева направо по сигнатуре функции: первое слово
+попадает в <code>AX</code>, второе — в <code>BX</code>, третье и четвёртое — в <code>CX</code> и <code>DI</code> (дальше идут <code>SI</code> и
+<code>R8</code>–<code>R11</code>). С возвращаемыми значениями ситуация аналогична.
 <code>slicebytetostring</code> возвращает только одно значение типа string. Но строка в Go — это
 два поля: указатель на последовательность байт и значение длины строки. Поэтому, чтобы
 передать <em>одну</em> строку, нужно ровно два регистра.
@@ -769,10 +788,10 @@ runtime может попытаться считать значение ёмко
 <a href="http://bear.ces.cwru.edu/eecs_314/endian_comparison.html">Endian Comparison</a>&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:9">
-<p>Ссылки на слайс более не существует, но есть ссылка на заголовок строки. В заголовке
-слайса есть ещё ёмкость. Вопрос на самостоятельное изучение, что станет с теми восемью байтами,
-в которых хранилась ёмкость, после того как заголовок строки (если он находился в куче) будет
-собран сборщиком мусора.&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Разыменование копирует 16 байт — указатель и длину — в новую переменную <code>str</code>.
+Заголовки у <code>buf</code> и <code>str</code> теперь разные, общий у них только массив байт. Вопрос на
+самостоятельное изучение: что напечатает <code>fmt.Println(str)</code>, если после этого выполнить
+<code>buf[0] = 'Y'</code>?&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:10">
 <p>Текст. Текст или строки, обычно, чутка более сложные сущности, чем просто
@@ -787,9 +806,11 @@ runtime может попытаться считать значение ёмко
 видеть, например, в Rust. Нет строк — нет проблем!&#160;<a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:11">
-<p>На самом деле, это довольно распространённая ошибка. Чаще всего
-её встретить можно при разыменовании <code>nil</code> указателя, когда забыли
-инициализировать поле структуры или что-то в этом роде.&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>На самом деле, сам сигнал SIGSEGV в Go встречается часто — при разыменовании
+<code>nil</code> указателя, когда забыли инициализировать поле структуры или что-то в этом роде.
+Но runtime превращает его в обычную панику <code>invalid memory address or nil pointer dereference</code>, которую можно перехватить через <code>recover</code>; строчку <code>[signal SIGSEGV: segmentation violation ...]</code> вы наверняка видели в её выводе. А вот при обращении к
+другим «плохим» адресам, как в примере ниже, паники не будет: runtime сразу завершит
+программу с <code>fatal error: fault</code>.&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:12">
 <p>Виды памяти в программе. Для нас
@@ -804,10 +825,9 @@ linux-based систем — <a href="https://manybutfinite.com/post/anatomy-of-
 <a href="https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4">Understanding the Memory Layout of Linux Executables</a>.&#160;<a href="#fnref:12" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:13">
-<p>Например, в протоколе TCP есть функциональность
-<a href="https://en.wikipedia.org/wiki/TCP_window_scale_option">окна</a>
-приёма/передачи, когда одна сторона уведомляет вторую о том, сколько
-ещё байт она может принять.&#160;<a href="#fnref:13" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Например, в протоколе TCP есть
+<a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Flow_control">окно приёма</a>:
+одна сторона сообщает другой, сколько ещё байт она может принять.&#160;<a href="#fnref:13" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:14">
 <p>Нельзя явно создавать экземпляры этих структур, только конвертировать из
